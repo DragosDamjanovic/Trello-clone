@@ -1,6 +1,0 @@
-export const ADD_LIST_LID = "ADD_LIST_LID";
-export const CHANGE_LIST_TITLE_LID = "CHANGE_LIST_TITLE_LID";
-export const DELETE_LIST_LID = "DELETE_LIST_LID";
-export const ADD_CARD_LID = "ADD_CARD_LID";
-export const MOVE_CARD_LID = "MOVE_CARD_LID";
-export const DELETE_CARD_LID = "DELETE_CARD_LID";

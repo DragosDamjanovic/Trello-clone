@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../../Styles/pages/login.scss";
+import "../Styles/pages/login2.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { login } from "../Redux/Actions/UserAction";
@@ -12,8 +12,6 @@ const Login = ({ location, history }) => {
   const [password, setPassword] = useState("");
 
   const dispatch = useDispatch();
-
-  // const redirect = location.pathname ? location.pathname.split("=")[1] : "/";
 
   const userLogin = useSelector((state) => state.userLogin);
   const { error, loading, userInfo } = userLogin;

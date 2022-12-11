@@ -1,9 +1,7 @@
 import { applyMiddleware, combineReducers, createStore } from "redux";
 import thunk from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
-import { WorkplaceByIdReducer } from "./Reducers/WorkplaceReducer";
-import { ListByIdReducer } from "./Reducers/ListReducer";
-import { CardByIdReducer } from "./Reducers/CardsReducer";
+import { WorkspaceReducer } from "./Reducers/WorkspaceReducer";
 import {
   userDetailsReducer,
   userLoginReducer,
@@ -11,27 +9,15 @@ import {
 } from "./Reducers/UserReducers";
 
 const reducers = combineReducers({
-  WorkplaceById: WorkplaceByIdReducer,
-  ListById: ListByIdReducer,
-  CardById: CardByIdReducer,
+  Workspace: WorkspaceReducer,
   userLogin: userLoginReducer,
   userRegister: userRegisterReducer,
   userDetailsReducer: userDetailsReducer,
 });
 
-// WORKPLACE
-// const workplaceInfoFromLocalStorage = localStorage.getItem("workplaceInfo")
-//   ? JSON.parse(localStorage.getItem("workplaceInfo"))
-//   : null;
-
-// LISTS
-const listsInfoFromLocalStorage = localStorage.getItem("listsInfo")
-  ? JSON.parse(localStorage.getItem("listsInfo"))
-  : null;
-
-// CARDS
-const cardsInfoFromLocalStorage = localStorage.getItem("cardsInfo")
-  ? JSON.parse(localStorage.getItem("cardsInfo"))
+// WORKSPACE
+const workspaceInfoFromLocalStorage = localStorage.getItem("workspaceInfo")
+  ? JSON.parse(localStorage.getItem("workspaceInfo"))
   : null;
 
 // LOGIN
@@ -40,13 +26,9 @@ const userInfoFromLocalStorage = localStorage.getItem("userInfo")
   : null;
 
 const initialState = {
-  Workplace: {
-    // workplaceInfo: workplaceInfoFromLocalStorage,
-    listsInfo: listsInfoFromLocalStorage,
-    cardsInfo: cardsInfoFromLocalStorage,
-  },
   userLogin: {
     userInfo: userInfoFromLocalStorage,
+    workspaceInfo: workspaceInfoFromLocalStorage,
   },
 };
 
