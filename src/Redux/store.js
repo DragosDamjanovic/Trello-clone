@@ -9,26 +9,28 @@ import {
 } from "./Reducers/UserReducers";
 
 const reducers = combineReducers({
-  Workspace: WorkspaceReducer,
+  workspace: WorkspaceReducer,
   userLogin: userLoginReducer,
   userRegister: userRegisterReducer,
-  userDetailsReducer: userDetailsReducer,
+  userDetails: userDetailsReducer,
 });
-
-// WORKSPACE
-const workspaceInfoFromLocalStorage = localStorage.getItem("workspaceInfo")
-  ? JSON.parse(localStorage.getItem("workspaceInfo"))
-  : null;
 
 // LOGIN
 const userInfoFromLocalStorage = localStorage.getItem("userInfo")
   ? JSON.parse(localStorage.getItem("userInfo"))
   : null;
 
+// workspace
+const workspaceFromLocalStorage = localStorage.getItem("workspace")
+  ? JSON.parse(localStorage.getItem("workspace"))
+  : {};
+
 const initialState = {
+  workspace: {
+    workspace: workspaceFromLocalStorage,
+  },
   userLogin: {
     userInfo: userInfoFromLocalStorage,
-    workspaceInfo: workspaceInfoFromLocalStorage,
   },
 };
 

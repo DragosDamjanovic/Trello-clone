@@ -38,7 +38,7 @@ workspaceRouter.post(
   })
 );
 
-// GET USER WORKSPACE
+// GET USER WORKSPACES
 workspaceRouter.get(
   "/",
   protect,

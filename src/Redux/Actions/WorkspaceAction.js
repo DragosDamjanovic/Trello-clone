@@ -12,7 +12,7 @@ import {
 // GET WORKSPACE
 export const getWorkspace = (id) => async (dispatch) => {
   try {
-    const { data } = await axios.get(`${URL}/api/workspace/${id}`);
+    const res = await axios.get(`${URL}/api/workspace/${id}`);
 
     if (res) {
       axios.defaults.headers.common["workplaceId"] = id;
@@ -22,26 +22,39 @@ export const getWorkspace = (id) => async (dispatch) => {
 
     dispatch({
       type: GET_WORKSPACE,
-      payload: { ...data, listObjects: [], cardObjects: [] },
+      payload: { ...res.data, listObjects: [], cardObjects: [] },
     });
+    localStorage.setItem("workspace", JSON.stringify(res.data));
   } catch (err) {
-    res.status(500);
+    err.status(500);
     throw new Error(err.message);
   }
 };
 
 // GET WORKSPACES
-export const getWorkspaces = () => async (dispatch) => {
+export const getWorkspaces = () => async (dispatch, getState) => {
   try {
-    const { data } = await axios.get(`${URL}/api/workspace`);
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const res = await axios.get("http://localhost:5000/api/workspaces", config);
 
     dispatch({
       type: GET_WORKSPACES,
-      payload: data,
+      payload: res.data,
     });
+    localStorage.setItem("workspace", JSON.stringify(res.data));
   } catch (err) {
     // WORKSPACE_ERROR not implemented
-    res.status(500);
+    err.status(500);
     throw new Error(err.message);
   }
 };
@@ -50,16 +63,16 @@ export const getWorkspaces = () => async (dispatch) => {
 export const addWorkspace = (formData, history) => async (dispatch) => {
   try {
     const body = JSON.stringify(formData);
-    const res = await axios.post(`${URL}/api/workspace`, body, config);
+    const res = await axios.post(`${URL}/api/workspace`, body);
 
     dispatch({
       type: ADD_WORKSPACE,
       payload: res.data,
     });
 
-    history.push(`${URL}/api/workspace/${(res.data, _id)}`);
+    history.push(`${URL}/api/workspace/${res.data.id}`);
   } catch (err) {
-    res.status(500);
+    err.status(500);
     throw new Error(err.message);
   }
 };
@@ -67,14 +80,14 @@ export const addWorkspace = (formData, history) => async (dispatch) => {
 // GET LIST
 export const getList = (id) => async (dispatch) => {
   try {
-    const { data } = await axios.get(`${URL}/api/lists/${id}`);
+    const res = await axios.get(`${URL}/api/lists/${id}`);
 
     dispatch({
       type: GET_LIST,
-      payload: data,
+      payload: res.data,
     });
   } catch (err) {
-    res.status(500);
+    err.status(500);
     throw new Error(err.message);
   }
 };
@@ -83,14 +96,14 @@ export const getList = (id) => async (dispatch) => {
 export const addList = (formData) => async (dispatch) => {
   try {
     const body = JSON.stringify(formData);
-    const res = await axios.get(`${URL}/api/lists`, config, body);
+    const res = await axios.get(`${URL}/api/lists`, body);
 
     dispatch({
       type: ADD_LIST,
       payload: res.data,
     });
   } catch (err) {
-    res.status(500);
+    err.status(500);
     throw new Error(err.message);
   }
 };
@@ -98,14 +111,14 @@ export const addList = (formData) => async (dispatch) => {
 // GET CARD
 export const getCard = (id) => async (dispatch) => {
   try {
-    const { data } = await axios.get(`${URL}/api/cards/${id}`);
+    const res = await axios.get(`${URL}/api/cards/${id}`);
 
     dispatch({
       type: GET_CARD,
-      payload: data,
+      payload: res.data,
     });
   } catch (err) {
-    res.status(500);
+    err.status(500);
     throw new Error(err.message);
   }
 };
@@ -114,14 +127,14 @@ export const getCard = (id) => async (dispatch) => {
 export const addCard = (formData) => async (dispatch) => {
   try {
     const body = JSON.stringify(formData);
-    const res = await dispatchaxios.get(`${URL}/api/cards/${id}`, config, body);
+    const res = await axios.get(`${URL}/api/cards`, body);
 
     dispatch({
       type: ADD_CARD,
       payload: res.data,
     });
   } catch (err) {
-    res.ststus(500);
+    err.ststus(500);
     throw new Error(err.message);
   }
 };

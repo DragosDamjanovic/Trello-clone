@@ -20,7 +20,7 @@ app.use("/api/import", ImportData);
 app.use("/api/users", userRouter);
 app.use("/api/lists", listRouter);
 app.use("/api/cards", cardRouter);
-app.use("/api/workspace", workspaceRouter);
+app.use("/api/workspaces", workspaceRouter);
 
 // ERROR HANDLER
 app.use(notFound);

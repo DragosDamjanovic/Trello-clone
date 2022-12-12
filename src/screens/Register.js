@@ -1,29 +1,30 @@
 import React, { useEffect, useState } from "react";
-import "../Styles/pages/register.scss";
+import "../Styles/pages/login2.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import Message from "./../components/LoadingError/Error";
-import Loading from "./../components/LoadingError/Loading";
 import { register } from "../Redux/Actions/UserAction";
-import { useNavigate } from "react-router-dom";
+import Message from "./../components/LoadingError/Error";
+import Loading from "../components/LoadingError/Loading";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 
-const Register = () => {
+const Register = ({ location, history }) => {
   window.scrollTo(0, 0);
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const userRegister = useSelector((state) => state.userRegister);
   const { error, loading, userInfo } = userRegister;
 
   useEffect(() => {
     if (userInfo) {
-      navigate("/profile");
+      history.push("/dashboard");
     }
-  }, [userInfo, navigate]);
+  }, [userInfo, history]);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -32,73 +33,72 @@ const Register = () => {
 
   return (
     <>
-      <div className="register-page">
-        <div className="main-content m-0">
-          <div className="register-content m-0">
-            <div className="register-bg">
-              <div className="register-box">
-                {error && <Message variant="alert-danger">{error}</Message>}
-                {loading && <Loading />}
-                <div className="register-box-1">
-                  <h2>
-                    <strong>Trello clone</strong>
-                  </h2>
-                  <form className="register-form" onSubmit={submitHandler}>
-                    <div className="group">
-                      <div className="group-inner">
-                        <label className="label-1">Name</label>
-                        <input
-                          className="input-2 input-icon icon-user-1"
-                          type="name"
-                          value={name}
-                          onChange={(e) => {
-                            setName(e.target.value);
-                          }}
-                        />
-                      </div>
-                    </div>
-                    <div className="group">
-                      <div className="group-inner">
-                        <label className="label-1">Email</label>
-                        <input
-                          className="input-2 input-icon icon-user-1"
-                          type="email"
-                          value={email}
-                          onChange={(e) => {
-                            setEmail(e.target.value);
-                          }}
-                        />
-                      </div>
-                    </div>
-                    <div className="group">
-                      <div className="group-inner">
-                        <label className="label-1">Password</label>
-                        <input
-                          className="input-2 input-icon icon-lock-1"
-                          type="password"
-                          value={password}
-                          onChange={(e) => {
-                            setPassword(e.target.value);
-                          }}
-                        />
-                      </div>
-                    </div>
-
-                    <div className="group-submit">
-                      <div className="group-inner">
-                        <button
-                          type="submit"
-                          className="btn-1 color-1 register-submit-btn"
-                        >
-                          Register{" "}
-                        </button>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-              </div>
+      <div className="container d-flex flex-column justify-content-center align-items-center login-center">
+        {error && <Message variant="alert-danger">{error}</Message>}
+        {loading && <Loading />}
+        <div className="col-6 d-flex flex-column align-items-center justify-content-center">
+          <header className="logo-wrapper text-center">
+            <div className="logo d-inline-block">
+              <img src="../../public/trello-logo.jpg" alt="Trello logo" />
             </div>
-          </div>
+          </header>
+          <section className="form-wrapper col-7 d-flex flex-column align-items-center">
+            <div className="d-flex align-items-center text-center mb-2">
+              <h5>Log in to continue</h5>
+            </div>
+
+            <Box
+              component="form"
+              autoComplete="off"
+              className="Login col-10 d-flex flex-column align-items-center"
+              id="loginForm"
+              onSubmit={submitHandler}
+            >
+              <TextField
+                required
+                className="mb-4"
+                type="name"
+                label="Name"
+                value={name}
+                onChange={(e) => {
+                  setName(e.target.value);
+                }}
+              />
+
+              <TextField
+                required
+                className="mb-4"
+                type="email"
+                label="Email"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+              />
+
+              <TextField
+                required
+                className="mb-4"
+                type="password"
+                label="Password"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+              />
+
+              <Button
+                type="submit"
+                variant="contained"
+                className="btn btn-primary text-center"
+              >
+                <Link to={"/dashboard"}>Register</Link>
+              </Button>
+              <p>
+                <Link to={"/"}>Log in</Link>
+              </p>
+            </Box>
+          </section>
         </div>
       </div>
     </>
