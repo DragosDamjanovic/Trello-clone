@@ -20,10 +20,7 @@ export const login = (email, password) => async (dispatch) => {
     dispatch({ type: USER_LOGIN_REQUEST });
     const config = {
       headers: {
-        Accept: "application/json",
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "https://developer.mozilla.org",
-        Vary: "Origin",
       },
     };
     const { data } = await axios.post(

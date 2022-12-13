@@ -26,7 +26,7 @@ listRouter.post(
       const list = await newList.save();
 
       // Assign list to workspace
-      const workspace = await Workspace.findById("workspaceId");
+      const workspace = await Workspace.findById(workspaceId);
       workspace.lists.push(list.id);
 
       res.json(list);

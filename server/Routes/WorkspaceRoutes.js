@@ -29,6 +29,7 @@ workspaceRouter.post(
       const user = await User.findById(req.user.id);
       user.workspaces.unshift(workspace.id);
       await user.save();
+      await workspace.save();
 
       res.json(workspace);
     } catch (err) {

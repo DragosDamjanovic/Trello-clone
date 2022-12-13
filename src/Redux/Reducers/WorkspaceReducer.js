@@ -17,7 +17,7 @@ export const WorkspaceReducer = (
     case GET_WORKSPACES:
       return { ...state, workspaces: action.payload };
     case GET_WORKSPACE:
-      return { ...state, workspace: action.payload };
+      return { ...state, workspace: { ...state.workspace, ...action.payload } };
     case ADD_WORKSPACE: {
       return { ...state, workspaces: [action.payload, ...state.workspaces] };
     }

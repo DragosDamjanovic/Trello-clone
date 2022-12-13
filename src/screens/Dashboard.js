@@ -9,7 +9,7 @@ const Dashboard = () => {
   const dispatch = useDispatch();
   const workspaces = useSelector((state) => state.workspace.workspaces);
   const user = useSelector((state) => state.userDetails);
-  //console.log(getWorkspaces());
+  console.log(workspaces);
 
   useEffect(() => {
     dispatch(getWorkspaces());
@@ -17,7 +17,7 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
-      <Header />
+      {/* <Header /> */}
       <section className="dashboard">
         <h1>Welcome {user.name}</h1>
         <h2>Your Workspaces</h2>
@@ -36,7 +36,7 @@ const Dashboard = () => {
                 {workspaces.map((workspace) => (
                   <li className="workspaces-list-item">
                     <Link
-                      to={`/workspace/${workspace._id}`}
+                      to={`/workspaces/${workspace._id}`}
                       key={workspace._id}
                       className="workspace-card"
                     >

@@ -8,16 +8,28 @@ import {
   GET_WORKSPACE,
   GET_WORKSPACES,
 } from "../Constants/WorkspaceConstants";
+import { URL } from "../Url";
+import { logout } from "./UserAction";
 
 // GET WORKSPACE
-export const getWorkspace = (id) => async (dispatch) => {
+export const getWorkspace = (id) => async (dispatch, getState) => {
   try {
-    const res = await axios.get(`${URL}/api/workspace/${id}`);
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    const res = await axios.get(`${URL}/api/workspaces/${id}`, config);
 
     if (res) {
-      axios.defaults.headers.common["workplaceId"] = id;
+      axios.defaults.headers.common["workspaceId"] = id;
     } else {
-      delete axios.defaults.headers.common["workplaceId"];
+      delete axios.defaults.headers.common["workspaceId"];
     }
 
     dispatch({
@@ -25,9 +37,12 @@ export const getWorkspace = (id) => async (dispatch) => {
       payload: { ...res.data, listObjects: [], cardObjects: [] },
     });
     localStorage.setItem("workspace", JSON.stringify(res.data));
-  } catch (err) {
-    err.status(500);
-    throw new Error(err.message);
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    throw new Error(message);
   }
 };
 
@@ -45,37 +60,54 @@ export const getWorkspaces = () => async (dispatch, getState) => {
       },
     };
 
-    const res = await axios.get("http://localhost:5000/api/workspaces", config);
+    const res = await axios.get(`${URL}/api/workspaces`, config);
 
     dispatch({
       type: GET_WORKSPACES,
       payload: res.data,
     });
     localStorage.setItem("workspace", JSON.stringify(res.data));
-  } catch (err) {
-    // WORKSPACE_ERROR not implemented
-    err.status(500);
-    throw new Error(err.message);
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    throw new Error(message);
   }
 };
 
 // ADD WORKSPACE
-export const addWorkspace = (formData, history) => async (dispatch) => {
-  try {
-    const body = JSON.stringify(formData);
-    const res = await axios.post(`${URL}/api/workspace`, body);
+// prettier-ignore
+export const addWorkspace = (formData, history) => async (dispatch, getState) => {
+    try {
+      const body = JSON.stringify(formData);
+      const {
+        userLogin: { userInfo },
+      } = getState();
 
-    dispatch({
-      type: ADD_WORKSPACE,
-      payload: res.data,
-    });
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
 
-    history.push(`${URL}/api/workspace/${res.data.id}`);
-  } catch (err) {
-    err.status(500);
-    throw new Error(err.message);
-  }
-};
+      const res = await axios.post(`${URL}/api/workspaces`, body, config);
+
+      dispatch({
+        type: ADD_WORKSPACE,
+        payload: res.data,
+      });
+
+      history.push(`${URL}/api/workspaces/${res.data.id}`);
+    } catch (error) {
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
+      throw new Error(message);
+    }
+  };
 
 // GET LIST
 export const getList = (id) => async (dispatch) => {
@@ -86,25 +118,43 @@ export const getList = (id) => async (dispatch) => {
       type: GET_LIST,
       payload: res.data,
     });
-  } catch (err) {
-    err.status(500);
-    throw new Error(err.message);
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    throw new Error(message);
   }
 };
 
 // ADD LIST
-export const addList = (formData) => async (dispatch) => {
+export const addList = (formData) => async (dispatch, getState) => {
   try {
     const body = JSON.stringify(formData);
-    const res = await axios.get(`${URL}/api/lists`, body);
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    const res = await axios.post(`${URL}/api/lists`, body, config);
 
     dispatch({
       type: ADD_LIST,
       payload: res.data,
     });
-  } catch (err) {
-    err.status(500);
-    throw new Error(err.message);
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    if (message === "Not authorized, token failed") {
+      dispatch(logout());
+    }
   }
 };
 
@@ -127,7 +177,7 @@ export const getCard = (id) => async (dispatch) => {
 export const addCard = (formData) => async (dispatch) => {
   try {
     const body = JSON.stringify(formData);
-    const res = await axios.get(`${URL}/api/cards`, body);
+    const res = await axios.post(`${URL}/api/cards`, body);
 
     dispatch({
       type: ADD_CARD,
