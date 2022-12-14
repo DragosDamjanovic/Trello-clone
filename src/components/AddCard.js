@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { addList } from "../Redux/Actions/WorkspaceAction";
+import { addCard } from "../Redux/Actions/WorkspaceAction";
 import TextField from "@mui/material/TextField";
 import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
 import { Button, Popover } from "@mui/material";
 
-const AddList = () => {
+const AddCard = ({ listId }) => {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const dispatch = useDispatch();
@@ -14,15 +14,15 @@ const AddList = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    dispatch(addList({ title }));
+    dispatch(addCard({ title, listId }));
     setTitle("");
   };
 
   return (
     <>
-      <div className="add-list">
-        <Button className="open-add-list" onClick={() => setOpen(true)}>
-          <AddIcon /> Add another list
+      <div className="add-card">
+        <Button className="open-add-card" onClick={() => setOpen(true)}>
+          <AddIcon /> Add another card
         </Button>
       </div>
       <Popover
@@ -45,14 +45,14 @@ const AddList = () => {
             fullWidth
             margin="normal"
             required
-            label="Enter list title"
+            label="Enter a title for this card..."
             autoFocus
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
-          <div className="add-list-controls">
+          <div className="add-card-controls">
             <Button type="submit" variant="contained" color="primary">
-              Add list
+              Add card
             </Button>
             <Button onClick={() => setOpen(false)}>
               <CloseIcon />
@@ -64,4 +64,4 @@ const AddList = () => {
   );
 };
 
-export default AddList;
+export default AddCard;

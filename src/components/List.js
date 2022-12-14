@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
-import "../Styles/components/header.scss";
+import "../Styles/components/list.scss";
 import { useDispatch, useSelector } from "react-redux";
 import ListEditor from "./ListEditor";
 import Card from "./Card";
 import PropTypes from "prop-types";
-import { getWorkspace } from "../Redux/Actions/WorkspaceAction";
+import { getList } from "../Redux/Actions/WorkspaceAction";
+import AddCard from "./AddCard";
 
 const List = ({ listId, index }) => {
   const dispatch = useDispatch();
@@ -14,28 +15,28 @@ const List = ({ listId, index }) => {
     )
   );
 
-  console.log(list);
-
   useEffect(() => {
-    dispatch(getWorkspace());
-  }, [dispatch]);
+    dispatch(getList(listId));
+  }, [dispatch, listId]);
 
   return (
-    <>
-      <div className="list-wrapper">
-        <div className="list-content">
-          <div className="list-header">
-            <ListEditor />
-          </div>
-          <div className="list-cards">
-            {list.cards.map((cardId, index) => (
-              <Card key={cardId} cardId={cardId} index={index} />
-            ))}
-          </div>
-          <div className="add-card-container"></div>
-        </div>
+    <div className="list-content">
+      <div className="list-header">
+        <ListEditor list={list} />
       </div>
-    </>
+      <div className="list-cards">
+        {!list ? (
+          <AddCard listId={listId} />
+        ) : (
+          <>
+            {list.cards.map((cardId, index) => (
+              <Card key={cardId} cardId={cardId} list={list} index={index} />
+            ))}
+            <AddCard listId={listId} />
+          </>
+        )}
+      </div>
+    </div>
   );
 };
 

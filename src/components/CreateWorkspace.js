@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import "./../Styles/components/createWorkspace.scss";
 import CloseIcon from "@mui/icons-material/Close";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
+import Typography from "@mui/material/Typography";
 import { useDispatch } from "react-redux";
 import { addWorkspace } from "../Redux/Actions/WorkspaceAction";
 
@@ -17,13 +19,28 @@ const CreateWorkspace = ({ history }) => {
     dispatch(addWorkspace({ title }, history));
   };
 
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    boxShadow: 24,
+    p: 4,
+  };
+
   const body = (
-    <Box>
+    <Box sx={style}>
       <div className="modal-top">
-        <h1>Create nw workspace</h1>
-        <Button onClick={() => setOpen(false)}>
-          <CloseIcon />
-        </Button>
+        <div id="modal-modal-title" className="d-flex justify-content-between">
+          <Typography variant="h6" component="h2">
+            Create new workspace
+          </Typography>
+          <Button onClick={() => setOpen(false)}>
+            <CloseIcon />
+          </Button>
+        </div>
         <form onSubmit={(e) => onSubmit(e)}>
           <TextField
             variant="outlined"
@@ -44,11 +61,16 @@ const CreateWorkspace = ({ history }) => {
   );
 
   return (
-    <li>
+    <li className="workspaces-list-item-add-workspace">
       <Button className="create-workspace" onClick={() => setOpen(true)}>
         Create new workspace
       </Button>
-      <Modal open={open} onClose={() => setOpen(false)}>
+      <Modal
+        open={open}
+        onClose={() => setOpen(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
         {body}
       </Modal>
     </li>

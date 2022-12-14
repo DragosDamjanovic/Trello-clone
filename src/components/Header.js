@@ -9,10 +9,6 @@ const Header = () => {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
-  const logoutHandler = () => {
-    dispatch(logout());
-  };
-
   return (
     <div className="board-header">
       <div className="board-header-btn">

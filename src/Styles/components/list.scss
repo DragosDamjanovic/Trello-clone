@@ -1,0 +1,38 @@
+.list-content {
+  background-color: #ebecf0;
+  border-radius: 3px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+  position: relative;
+  white-space: normal;
+  width: 100%;
+
+  .list-header {
+    flex: 0 0 auto;
+    min-height: 20px;
+    padding: 10px 8px;
+    position: relative;
+
+    .list-title {
+      bottom: 0;
+      cursor: pointer;
+      left: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+
+    .list-title-textarea {
+      background: #0000;
+      border-radius: 3px;
+      font-weight: 600;
+      height: 28px;
+      margin: -4px 0;
+      max-height: 256px;
+      min-height: 20px;
+      padding: 4px 8px;
+    }
+  }
+}

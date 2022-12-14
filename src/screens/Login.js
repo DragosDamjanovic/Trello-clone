@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../Styles/pages/login2.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { login } from "../Redux/Actions/UserAction";
 import Message from "./../components/LoadingError/Error";
 import Loading from "../components/LoadingError/Loading";
@@ -9,7 +9,7 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 
-const Login = ({ location, history }) => {
+const Login = () => {
   window.scrollTo(0, 0);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,12 +17,16 @@ const Login = ({ location, history }) => {
   const dispatch = useDispatch();
 
   const userLogin = useSelector((state) => state.userLogin);
-  const { error, loading } = userLogin;
+  const { error, loading, userInfo } = userLogin;
 
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(login(email, password));
   };
+
+  if (userInfo) {
+    return <Navigate to="/dashboard" />;
+  }
 
   return (
     <>
@@ -78,7 +82,7 @@ const Login = ({ location, history }) => {
                 variant="contained"
                 className="text-center"
               >
-                <Link to={"/dashboard"}>Login</Link>
+                Login
               </Button>
               <p>
                 <Link to={"/register"}>Create Account</Link>

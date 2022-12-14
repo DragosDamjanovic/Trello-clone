@@ -29,7 +29,7 @@ cardRouter.post(
       list.cards.push(card.id);
       await list.save();
 
-      res.json({ title, cardId: card.id, listId: listId });
+      res.json({ cardId: card.id, listId });
     } catch (err) {
       res.status(500);
       throw new Error(err.message);

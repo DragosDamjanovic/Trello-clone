@@ -7,6 +7,7 @@ import {
   GET_LIST,
   GET_WORKSPACE,
   GET_WORKSPACES,
+  RENAME_LIST,
 } from "../Constants/WorkspaceConstants";
 import { URL } from "../Url";
 import { logout } from "./UserAction";
@@ -110,9 +111,20 @@ export const addWorkspace = (formData, history) => async (dispatch, getState) =>
   };
 
 // GET LIST
-export const getList = (id) => async (dispatch) => {
+export const getList = (id) => async (dispatch, getState) => {
   try {
-    const res = await axios.get(`${URL}/api/lists/${id}`);
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const res = await axios.get(`${URL}/api/lists/${id}`, config);
 
     dispatch({
       type: GET_LIST,
@@ -152,39 +164,107 @@ export const addList = (formData) => async (dispatch, getState) => {
       error.response && error.response.data.message
         ? error.response.data.message
         : error.message;
-    if (message === "Not authorized, token failed") {
-      dispatch(logout());
-    }
+    throw new Error(message);
+    // if (message === "Not authorized, token failed") {
+    //   dispatch(logout());
+    // }
+  }
+};
+
+export const renameList = (listId, formData) => async (dispatch, getState) => {
+  try {
+    const body = JSON.stringify(formData);
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const res = await axios.patch(
+      `${URL}/api/lists/rename/${listId}`,
+      formData,
+      config
+    );
+
+    dispatch({
+      type: RENAME_LIST,
+      payload: res.data,
+    });
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    throw new Error(message);
   }
 };
 
 // GET CARD
-export const getCard = (id) => async (dispatch) => {
+export const getCard = (id) => async (dispatch, getState) => {
   try {
-    const res = await axios.get(`${URL}/api/cards/${id}`);
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const res = await axios.get(`${URL}/api/cards/${id}`, config);
 
     dispatch({
       type: GET_CARD,
       payload: res.data,
     });
-  } catch (err) {
-    err.status(500);
-    throw new Error(err.message);
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    throw new Error(message);
+    // if (message === "Not authorized, token failed") {
+    //   dispatch(logout());
+    // }
   }
 };
 
 // ADD CARD
-export const addCard = (formData) => async (dispatch) => {
+export const addCard = (formData) => async (dispatch, getState) => {
   try {
     const body = JSON.stringify(formData);
-    const res = await axios.post(`${URL}/api/cards`, body);
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const res = await axios.post(`${URL}/api/cards`, body, config);
 
     dispatch({
       type: ADD_CARD,
       payload: res.data,
     });
-  } catch (err) {
-    err.ststus(500);
-    throw new Error(err.message);
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    throw new Error(message);
+    // if (message === "Not authorized, token failed") {
+    //   dispatch(logout());
+    // }
   }
 };

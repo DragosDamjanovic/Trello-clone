@@ -1,27 +1,27 @@
 import React, { useEffect } from "react";
+import "../Styles/pages/trello.scss";
 import Header from "../components/Header";
-import TextField from "@mui/material/TextField";
-import Box from "@mui/material/Box";
 import { useDispatch, useSelector } from "react-redux";
 import { getWorkspace } from "../Redux/Actions/WorkspaceAction";
+import { useParams } from "react-router-dom";
 import List from "./../components/List";
 import AddList from "../components/AddList";
 
-const Trello = ({ match }) => {
+const Trello = () => {
   const dispatch = useDispatch();
   const workspace = useSelector((state) => state.workspace.workspace);
-  console.log(workspace);
+  const { id } = useParams();
 
   useEffect(() => {
-    dispatch(getWorkspace(workspace._id));
-  }, [dispatch, workspace._id]);
+    dispatch(getWorkspace(id));
+  }, [dispatch, id]);
 
   return (
     <>
       <Header />
       <div className="board-canvas">
         <div className="board">
-          <div className="lists">
+          <div className="lists-wrapper">
             {!workspace.lists ? (
               <AddList />
             ) : (
