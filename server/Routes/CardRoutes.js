@@ -62,7 +62,7 @@ cardRouter.get(
 );
 
 // GET CARD BY ID
-cardRouter.put(
+cardRouter.get(
   "/:id",
   protect,
   asyncHandler(async (req, res) => {
@@ -73,6 +73,47 @@ cardRouter.put(
       }
 
       res.json(card);
+    } catch (err) {
+      res.status(500);
+      throw new Error(err.message);
+    }
+  })
+);
+
+// MOVE CARD
+cardRouter.patch(
+  "/move/:id",
+  protect,
+  asyncHandler(async (req, res) => {
+    try {
+      const { formId, toId, toIndex } = req.body;
+      const workspaceId = req.header("workspaceId");
+
+      const cardId = req.params.id;
+      const from = await List.findById(formId);
+      let to = await List.findById(toId);
+      if (!cardId || !from || !to) {
+        return res.status(404).json({ message: "List/card not found" });
+      } else if (formId === toId) {
+        to = from;
+      }
+
+      const fromIndex = from.cards.indexOf(cardId);
+      if (fromIndex !== -1) {
+        from.cards.splice(fromIndex, 1);
+        await from.save();
+      }
+
+      if (!to.cards.includes(cardId)) {
+        if (toIndex === 0 || toIndex) {
+          to.cards.splice(toIndex, 0, cardId);
+        } else {
+          to.cards.push(cardId);
+        }
+        await to.save();
+      }
+
+      res.send({ cardId, from, to });
     } catch (err) {
       res.status(500);
       throw new Error(err.message);

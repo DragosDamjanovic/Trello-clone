@@ -107,4 +107,30 @@ listRouter.patch(
   })
 );
 
+// MOVE LIST
+listRouter.patch(
+  "/move/:id",
+  protect,
+  asyncHandler(async (req, res) => {
+    try {
+      const toIndex = req.body.toIndex ? req.body.toIndex : 0;
+      const workspaceId = req.header("workspaceId");
+      const workspace = await Workspace.findById(workspaceId);
+      const listId = req.params.id;
+      if (!listId) {
+        return res.status(404).json({ message: "List not found" });
+      }
+
+      workspace.lists.splice(workspace.lists.indexOf(listId), 1);
+      workspace.lists.splice(toIndex, 0, listId);
+      await workspace.save();
+
+      res.send(workspace.lists);
+    } catch (err) {
+      res.status(500);
+      throw new Error(err.message);
+    }
+  })
+);
+
 export default listRouter;

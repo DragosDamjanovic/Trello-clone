@@ -7,6 +7,8 @@ import {
   GET_LIST,
   GET_WORKSPACE,
   GET_WORKSPACES,
+  MOVE_CARD,
+  MOVE_LIST,
   RENAME_LIST,
 } from "../Constants/WorkspaceConstants";
 import { URL } from "../Url";
@@ -171,9 +173,9 @@ export const addList = (formData) => async (dispatch, getState) => {
   }
 };
 
+// RENAME LIST
 export const renameList = (listId, formData) => async (dispatch, getState) => {
   try {
-    const body = JSON.stringify(formData);
     const {
       userLogin: { userInfo },
     } = getState();
@@ -193,6 +195,41 @@ export const renameList = (listId, formData) => async (dispatch, getState) => {
 
     dispatch({
       type: RENAME_LIST,
+      payload: res.data,
+    });
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    throw new Error(message);
+  }
+};
+
+// MOVE LIST
+export const moveList = (listId, formData) => async (dispatch, getState) => {
+  try {
+    const body = JSON.stringify(formData);
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const res = await axios.patch(
+      `${URL}/api/lists/move/${listId}`,
+      body,
+      config
+    );
+
+    dispatch({
+      type: MOVE_LIST,
       payload: res.data,
     });
   } catch (error) {
@@ -266,5 +303,39 @@ export const addCard = (formData) => async (dispatch, getState) => {
     // if (message === "Not authorized, token failed") {
     //   dispatch(logout());
     // }
+  }
+};
+
+// MOVE CARD
+export const moveCard = (cardId, formData) => async (dispatch, getState) => {
+  try {
+    const body = JSON.stringify(formData);
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const res = await axios.patch(
+      `${URL}/api/cards/move/${cardId}`,
+      body,
+      config
+    );
+
+    dispatch({
+      type: MOVE_CARD,
+      payload: res.data,
+    });
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    throw new Error(message);
   }
 };

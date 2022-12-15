@@ -20,15 +20,15 @@ const userInfoFromLocalStorage = localStorage.getItem("userInfo")
   ? JSON.parse(localStorage.getItem("userInfo"))
   : null;
 
-// workspace
-const workspaceFromLocalStorage = localStorage.getItem("workspace")
-  ? JSON.parse(localStorage.getItem("workspace"))
-  : {};
+// // workspace
+// const workspaceFromLocalStorage = localStorage.getItem("workspace")
+//   ? JSON.parse(localStorage.getItem("workspace"))
+//   : {};
 
 const initialState = {
-  workspace: {
-    workspace: workspaceFromLocalStorage,
-  },
+  // workspace: {
+  //   workspace: workspaceFromLocalStorage,
+  // },
   userLogin: {
     userInfo: userInfoFromLocalStorage,
   },

@@ -9,7 +9,7 @@ import { getWorkspaces } from "../Redux/Actions/WorkspaceAction";
 const Dashboard = () => {
   const dispatch = useDispatch();
   const workspaces = useSelector((state) => state.workspace.workspaces);
-  console.log(workspaces);
+  //console.log(workspaces);
 
   useEffect(() => {
     dispatch(getWorkspaces());

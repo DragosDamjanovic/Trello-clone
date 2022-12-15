@@ -41,7 +41,7 @@ const CreateWorkspace = ({ history }) => {
             <CloseIcon />
           </Button>
         </div>
-        <form onSubmit={(e) => onSubmit(e)}>
+        <form onSubmit={(e) => onSubmit(e)} id="modal-modal-description">
           <TextField
             variant="outlined"
             margin="normal"

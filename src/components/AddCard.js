@@ -20,9 +20,9 @@ const AddCard = ({ listId }) => {
 
   return (
     <>
-      <div className="add-card">
+      <div className="add-card row">
         <Button className="open-add-card" onClick={() => setOpen(true)}>
-          <AddIcon /> Add another card
+          <AddIcon /> Add card
         </Button>
       </div>
       <Popover
@@ -49,12 +49,18 @@ const AddCard = ({ listId }) => {
             autoFocus
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            onKeyPress={(e) => e.key === "Enter" && onSubmit(e)}
           />
           <div className="add-card-controls">
             <Button type="submit" variant="contained" color="primary">
               Add card
             </Button>
-            <Button onClick={() => setOpen(false)}>
+            <Button
+              onClick={() => {
+                setOpen(false);
+                setTitle("");
+              }}
+            >
               <CloseIcon />
             </Button>
           </div>

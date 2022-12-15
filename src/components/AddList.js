@@ -6,7 +6,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
 import { Button, Popover } from "@mui/material";
 
-const AddList = () => {
+const AddList = ({ workspaceId }) => {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const dispatch = useDispatch();
@@ -14,13 +14,13 @@ const AddList = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    dispatch(addList({ title }));
+    dispatch(addList({ title, workspaceId }));
     setTitle("");
   };
 
   return (
     <>
-      <div className="add-list">
+      <div className="add-list col-2">
         <Button className="open-add-list" onClick={() => setOpen(true)}>
           <AddIcon /> Add another list
         </Button>
