@@ -5,6 +5,7 @@ import {
   ADD_WORKSPACE,
   DELETE_CARD,
   DELETE_LIST,
+  EDIT_CARD,
   GET_CARD,
   GET_LIST,
   GET_WORKSPACE,
@@ -386,6 +387,39 @@ export const deleteCard = (listId, cardId) => async (dispatch, getState) => {
     );
 
     dispatch({ type: DELETE_CARD, payload: res.date });
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    throw new Error(message);
+  }
+};
+
+// EDIT CARD
+export const editCard = (cardId, formData) => async (dispatch, getState) => {
+  try {
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const res = await axios.patch(
+      `${URL}/api/cards/edit/${cardId}`,
+      formData,
+      config
+    );
+
+    dispatch({
+      type: EDIT_CARD,
+      payload: res.data,
+    });
   } catch (error) {
     const message =
       error.response && error.response.data.message

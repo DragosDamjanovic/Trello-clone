@@ -4,18 +4,24 @@ import { Draggable } from "react-beautiful-dnd";
 import PropTypes from "prop-types";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
+import VideoLabelIcon from "@mui/icons-material/VideoLabel";
+import DescriptionIcon from "@mui/icons-material/Description";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
 import { useDispatch, useSelector } from "react-redux";
-import { getCard } from "../Redux/Actions/WorkspaceAction";
+import {
+  deleteCard,
+  editCard,
+  getCard,
+} from "../Redux/Actions/WorkspaceAction";
 
 const Card = ({ cardId, list, index }) => {
   const [open, setOpen] = useState(false);
-  const [editing, setEditing] = useState(false);
   const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
   const dispatch = useDispatch();
   const card = useSelector((state) =>
     state.workspace.workspace.cardObjects.find(
@@ -30,8 +36,18 @@ const Card = ({ cardId, list, index }) => {
   useEffect(() => {
     if (card) {
       setTitle(card.title);
+      setDescription(card.description);
     }
   }, [card]);
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    dispatch(editCard(card._id, { title, description }));
+  };
+
+  const deleteCardHandler = async (e) => {
+    dispatch(deleteCard(list._id, cardId));
+  };
 
   const style = {
     position: "absolute",
@@ -50,33 +66,46 @@ const Card = ({ cardId, list, index }) => {
         <div id="modal-modal-title" className="d-flex justify-content-between">
           <div>
             <Typography variant="h6" component="h2">
-              Card <strong>{title}</strong> in list{" "}
-              <strong>{list.title}</strong>
+              <VideoLabelIcon /> <strong>{title}</strong>
             </Typography>
-            <Button>
-              <DeleteIcon />
-              Delete card
-            </Button>
+            <Typography variant="h6" component="h2">
+              in list <strong>{list.title}</strong>
+            </Typography>
           </div>
           <Button onClick={() => setOpen(false)}>
             <CloseIcon />
           </Button>
         </div>
-        <form id="modal-modal-description">
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            label="Add a more detailed description..."
-            autoFocus
-            value={title}
-            //onChange={(e) => setTitle(e.target.value)}
-          />
-          <Button type="submit" fullWidth variant="contained" color="primary">
-            Create Workspace
+        <div id="modal-modal-description">
+          <Button
+            onClick={() => {
+              deleteCardHandler(cardId);
+              setOpen(false);
+            }}
+          >
+            <DeleteIcon />
+            Delete card
           </Button>
-        </form>
+          <form onSubmit={(e) => onSubmit(e)}>
+            <Typography variant="h6" component="h2">
+              <DescriptionIcon /> Description
+            </Typography>
+
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              label="Add a more detailed description..."
+              autoFocus
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+            <Button type="submit" variant="contained" color="primary">
+              Save
+            </Button>
+          </form>
+        </div>
       </div>
     </Box>
   );
@@ -98,7 +127,6 @@ const Card = ({ cardId, list, index }) => {
             onClose={() => setOpen(false)}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
-            cardId={cardId}
             card={card}
             list={list}
           >

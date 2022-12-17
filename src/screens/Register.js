@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../Styles/pages/login2.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { register } from "../Redux/Actions/UserAction";
 import Message from "./../components/LoadingError/Error";
 import Loading from "../components/LoadingError/Loading";
@@ -9,7 +9,7 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 
-const Register = ({ location, history }) => {
+const Register = () => {
   window.scrollTo(0, 0);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,16 +20,14 @@ const Register = ({ location, history }) => {
   const userRegister = useSelector((state) => state.userRegister);
   const { error, loading, userInfo } = userRegister;
 
-  useEffect(() => {
-    if (userInfo) {
-      history.push("/dashboard");
-    }
-  }, [userInfo, history]);
-
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(register(name, email, password));
   };
+
+  if (userInfo) {
+    return <Navigate to="/dashboard" />;
+  }
 
   return (
     <>
@@ -89,10 +87,11 @@ const Register = ({ location, history }) => {
 
               <Button
                 type="submit"
+                color="primary"
                 variant="contained"
-                className="btn btn-primary text-center"
+                className="text-center"
               >
-                <Link to={"/dashboard"}>Register</Link>
+                Register
               </Button>
               <p>
                 <Link to={"/"}>Log in</Link>

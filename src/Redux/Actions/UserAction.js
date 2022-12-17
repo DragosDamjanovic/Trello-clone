@@ -94,11 +94,7 @@ export const register = (name, email, password) => async (dispatch) => {
     dispatch({ type: USER_REGISTER_REQUEST });
     const config = {
       headers: {
-        Accept: "application/json",
         "Content-Type": "application/json",
-
-        "Access-Control-Allow-Origin": "https://developer.mozilla.org",
-        Vary: "Origin",
       },
     };
     const { data } = await axios.post(

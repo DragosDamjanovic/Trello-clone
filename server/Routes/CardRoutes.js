@@ -36,7 +36,7 @@ cardRouter.post(
 
       res.json({ cardId: card.id, listId });
     } catch (err) {
-      res.status(500);
+      res.status(500).send("Server Error");
       throw new Error(err.message);
     }
   })
@@ -60,7 +60,7 @@ cardRouter.get(
 
       res.json(cards);
     } catch (err) {
-      res.status(500);
+      res.status(500).send("Server Error");
       throw new Error(err.message);
     }
   })
@@ -79,7 +79,7 @@ cardRouter.get(
 
       res.json(card);
     } catch (err) {
-      res.status(500);
+      res.status(500).send("Server Error");
       throw new Error(err.message);
     }
   })
@@ -125,7 +125,7 @@ cardRouter.patch(
 
       res.send({ cardId, from, to });
     } catch (err) {
-      res.status(500);
+      res.status(500).send("Server Error");
       throw new Error(err.message);
     }
   })
@@ -144,15 +144,46 @@ cardRouter.delete(
       }
 
       list.cards.splice(list.cards.indexOf(req.params.id), 1);
-      await list.save();
+
       await card.remove();
+      await list.save();
 
       const workspace = await Workspace.findById(req.header("workspaceId"));
       await workspace.save();
 
       res.json(req.params.id);
     } catch (err) {
-      res.status(500);
+      res.status(500).send("Server Error");
+      throw new Error(err.message);
+    }
+  })
+);
+
+// EDIT CARDS TITLE AND DESCRIPTION
+cardRouter.patch(
+  "/edit/:id",
+  protect,
+  asyncHandler(async (req, res) => {
+    try {
+      const { title, description } = req.body;
+      if (title === "") {
+        return res.status(400).json({ msg: "Title is required" });
+      }
+
+      const card = await Card.findById(req.params.id);
+      if (!card) {
+        return res.status(404).json({ msg: "Card not found" });
+      }
+
+      card.title = title ? title : card.title;
+      if (description || description === "") {
+        card.description = description;
+      }
+      await card.save();
+
+      res.json(card);
+    } catch (err) {
+      res.status(500).send("Server Error");
       throw new Error(err.message);
     }
   })

@@ -4,6 +4,7 @@ import {
   ADD_WORKSPACE,
   DELETE_CARD,
   DELETE_LIST,
+  EDIT_CARD,
   GET_CARD,
   GET_LIST,
   GET_WORKSPACE,
@@ -98,12 +99,29 @@ export const WorkspaceReducer = (
         workspace: {
           ...state.workspace,
           listObjects: state.workspace.listObjects.map((list) =>
-            list._id === action.payload._id
+            list._id === action.payload.from._id
               ? action.payload.from
               : list._id === action.payload.to._id
               ? action.payload.to
               : list
           ),
+          listObjects: state.workspace.listObjects.map((list) => {
+            if (list._id === action.payload.from._id) {
+              return {
+                ...list,
+                cards: list.cards.filter(
+                  (cardId) => cardId !== action.payload.cardId
+                ),
+              };
+            } else if (list._id === action.payload.to._id) {
+              return {
+                ...list,
+                cards: [...list.cards, action.payload.cardId],
+              };
+            } else {
+              return list;
+            }
+          }),
           cardObjects: state.workspace.cardObjects.filter(
             (card) =>
               card._id !== action.payload.cardId ||
@@ -126,6 +144,16 @@ export const WorkspaceReducer = (
                   cards: list.cards.filter((card) => card !== action.payload),
                 }
               : list
+          ),
+        },
+      };
+    case EDIT_CARD:
+      return {
+        ...state,
+        workspace: {
+          ...state.workspace,
+          cardObjects: state.workspace.cardObjects.map((card) =>
+            card._id === action.payload._id ? action.payload : card
           ),
         },
       };

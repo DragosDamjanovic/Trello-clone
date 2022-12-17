@@ -60,25 +60,4 @@ userRouter.post(
   })
 );
 
-// PROFILE
-userRouter.get(
-  "/profile",
-  protect,
-  asyncHandler(async (req, res) => {
-    const user = await User.findById(req.user.id);
-
-    if (user) {
-      res.json({
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        createdAt: user.createdAt,
-      });
-    } else {
-      res.status(404);
-      throw new Error("User not found");
-    }
-  })
-);
-
 export default userRouter;

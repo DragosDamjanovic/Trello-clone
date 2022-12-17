@@ -17,6 +17,7 @@ const CreateWorkspace = ({ history }) => {
   const onSubmit = async (e) => {
     e.preventDefault();
     dispatch(addWorkspace({ title }, history));
+    setOpen(false);
   };
 
   const style = {
