@@ -7,29 +7,40 @@ import AddIcon from "@mui/icons-material/Add";
 import { Button, Popover } from "@mui/material";
 
 const AddList = ({ workspaceId }) => {
-  const [open, setOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
   const [title, setTitle] = useState("");
   const dispatch = useDispatch();
-  const id = open ? "simple-popover" : undefined;
+
+  const handleClick = (event) => {
+    setAnchorEl(anchorEl ? null : event.currentTarget);
+  };
 
   const onSubmit = async (e) => {
     e.preventDefault();
     dispatch(addList({ title, workspaceId }));
+    handleClick(e);
     setTitle("");
   };
+
+  const open = Boolean(anchorEl);
+  const id = open ? "simple-popover" : undefined;
 
   return (
     <>
       <div className="add-list col-2">
-        <Button className="open-add-list" onClick={() => setOpen(true)}>
+        <Button
+          className="open-add-list"
+          aria-describedby={id}
+          type="button"
+          onClick={handleClick}
+        >
           <AddIcon /> Add another list
         </Button>
       </div>
       <Popover
         id={id}
         open={open}
-        anchorEl={open}
-        onClose={() => setOpen(false)}
+        anchorEl={anchorEl}
         anchorOrigin={{
           vertical: "top",
           horizontal: "left",
@@ -54,7 +65,7 @@ const AddList = ({ workspaceId }) => {
             <Button type="submit" variant="contained" color="primary">
               Add list
             </Button>
-            <Button onClick={() => setOpen(false)}>
+            <Button aria-describedby={id} type="button" onClick={handleClick}>
               <CloseIcon />
             </Button>
           </div>

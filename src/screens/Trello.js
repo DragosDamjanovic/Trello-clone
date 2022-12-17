@@ -1,7 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import "../Styles/pages/trello.scss";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import PropTypes from "prop-types";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import Header from "../components/Header";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -17,17 +16,21 @@ const Trello = () => {
   const dispatch = useDispatch();
   const workspace = useSelector((state) => state.workspace.workspace);
   const { id } = useParams();
-  console.log(workspace);
 
   useEffect(() => {
     dispatch(getWorkspace(id));
   }, [dispatch, id]);
 
   const onDragEnd = (result) => {
+    // Extract properties from result object
     const { source, destination, draggableId, type } = result;
+
+    // Return early if no destination is provided
     if (!destination) {
       return;
     }
+
+    // Dispatch action based on type
     if (type === "card") {
       dispatch(
         moveCard(draggableId, {
@@ -45,55 +48,32 @@ const Trello = () => {
     <>
       <Header />
       <div className="board-canvas">
-        <div className="board row mx-3 mt-2">
-          {!workspace ? (
-            <AddList workspaceId={id} />
-          ) : (
-            <>
-              <DragDropContext onDragEnd={onDragEnd}>
-                <Droppable
-                  droppableId="all-lists"
-                  direction="horizontal"
-                  type="list"
-                >
-                  {(provided) => (
-                    <div ref={provided.innerRef} {...provided.droppableProps}>
-                      {workspace.lists.map((listId, index) => (
-                        <Draggable draggableId={listId} index={index}>
-                          {(provided) => (
-                            <div
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                              ref={provided.innerRef}
-                            >
-                              <div className="lists-wrapper col-2">
-                                <List
-                                  key={listId}
-                                  listId={listId}
-                                  index={index}
-                                />
-                              </div>
-                            </div>
-                          )}
-                        </Draggable>
-                      ))}
-                      {provided.placeholder}
-                      <AddList workspaceId={id} />
-                    </div>
-                  )}
-                </Droppable>
-              </DragDropContext>
-            </>
-          )}
-        </div>
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="all-lists" direction="horizontal" type="list">
+            {(provided) => (
+              <div
+                className="board row mx-3 mt-2"
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+              >
+                {!workspace ? (
+                  <AddList workspaceId={id} />
+                ) : (
+                  <>
+                    {workspace.lists.map((listId, index) => (
+                      <List key={listId} listId={listId} index={index} />
+                    ))}
+                    {provided.placeholder}
+                    <AddList workspaceId={id} />
+                  </>
+                )}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
       </div>
     </>
   );
-};
-
-List.propTypes = {
-  listId: PropTypes.string.isRequired,
-  index: PropTypes.number.isRequired,
 };
 
 export default Trello;

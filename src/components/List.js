@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Droppable } from "react-beautiful-dnd";
+import { Droppable, Draggable } from "react-beautiful-dnd";
 import { useDispatch, useSelector } from "react-redux";
 import Card from "./Card";
 import PropTypes from "prop-types";
-import { getList, renameList } from "../Redux/Actions/WorkspaceAction";
+import {
+  deleteList,
+  getList,
+  renameList,
+} from "../Redux/Actions/WorkspaceAction";
 import AddCard from "./AddCard";
+import Button from "@mui/material/Button";
+import CloseIcon from "@mui/icons-material/Close";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 
 const List = ({ listId, index }) => {
@@ -34,50 +40,81 @@ const List = ({ listId, index }) => {
     setEditing(false);
   };
 
-  return (
-    <div className="list-content d-flex flex-column">
-      <div className="list-header row text-center">
-        {!editing ? (
-          <h3 className="list-title" onClick={() => setEditing(true)}>
-            {title}
-          </h3>
-        ) : (
-          <form onSubmit={(e) => onSubmit(e)}>
-            <TextareaAutosize
-              autoFocus
-              className="list-title-textarea"
-              placeholder={title}
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
-          </form>
-        )}
-      </div>
+  const deleteListHandler = async (e) => {
+    dispatch(deleteList(listId));
+  };
 
-      {!list ? (
-        <AddCard listId={listId} />
-      ) : (
-        <>
-          <Droppable droppableId={listId} type="card">
-            {(provided) => (
-              <div {...provided.droppableProps} ref={provided.innerRef}>
-                <div className="list-cards row">
-                  {list.cards.map((cardId, index) => (
-                    <Card
-                      key={cardId}
-                      cardId={cardId}
-                      list={list}
-                      index={index}
-                    />
-                  ))}
-                </div>
-                <AddCard listId={listId} />
-              </div>
+  return (
+    <Draggable draggableId={listId} index={index}>
+      {(provided) => (
+        <div
+          className="list-wrapper col-2"
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          ref={provided.innerRef}
+        >
+          <div className="list-content d-flex flex-column">
+            <div className="list-header row d-flex flex-row">
+              {!editing ? (
+                <>
+                  <div
+                    className="list-title col-8"
+                    onClick={() => setEditing(true)}
+                  >
+                    {title}
+                  </div>
+                  <div className="col-4">
+                    <Button onClick={() => deleteListHandler(listId)}>
+                      <CloseIcon />
+                    </Button>
+                  </div>
+                </>
+              ) : (
+                <form>
+                  <TextareaAutosize
+                    autoFocus
+                    className="list-title-textarea"
+                    placeholder={title}
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    onKeyPress={(e) => e.key === "Enter" && onSubmit(e)}
+                  />
+                </form>
+              )}
+            </div>
+
+            {!list ? (
+              <AddCard listId={listId} />
+            ) : (
+              <>
+                <Droppable droppableId={listId} type="card">
+                  {(provided) => (
+                    <>
+                      <div
+                        className="list-cards row"
+                        {...provided.droppableProps}
+                        ref={provided.innerRef}
+                      >
+                        {list.cards.map((cardId, index) => (
+                          <Card
+                            key={cardId}
+                            cardId={cardId}
+                            list={list}
+                            index={index}
+                          />
+                        ))}
+                      </div>
+                      {provided.placeholder}
+                      <AddCard listId={listId} />
+                    </>
+                  )}
+                </Droppable>
+              </>
             )}
-          </Droppable>
-        </>
+          </div>
+        </div>
       )}
-    </div>
+    </Draggable>
   );
 };
 

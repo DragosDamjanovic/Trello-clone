@@ -3,7 +3,6 @@ import asyncHandler from "express-async-handler";
 import protect from "../Middleware/AuthMiddleware.js";
 import { check, validationResult } from "express-validator";
 import Workspace from "../Models/WorkspaceModel.js";
-import List from "../Models/ListModel.js";
 import User from "../Models/UserModel.js";
 
 const workspaceRouter = express.Router();

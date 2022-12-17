@@ -7,29 +7,40 @@ import AddIcon from "@mui/icons-material/Add";
 import { Button, Popover } from "@mui/material";
 
 const AddCard = ({ listId }) => {
-  const [open, setOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
   const [title, setTitle] = useState("");
   const dispatch = useDispatch();
-  const id = open ? "simple-popover" : undefined;
+
+  const handleClick = (event) => {
+    setAnchorEl(anchorEl ? null : event.currentTarget);
+  };
 
   const onSubmit = async (e) => {
     e.preventDefault();
     dispatch(addCard({ title, listId }));
+    handleClick(e);
     setTitle("");
   };
+
+  const open = Boolean(anchorEl);
+  const id = open ? "simple-popover" : undefined;
 
   return (
     <>
       <div className="add-card row">
-        <Button className="open-add-card" onClick={() => setOpen(true)}>
+        <Button
+          className="open-add-card"
+          aria-describedby={id}
+          type="button"
+          onClick={handleClick}
+        >
           <AddIcon /> Add card
         </Button>
       </div>
       <Popover
         id={id}
         open={open}
-        anchorEl={open}
-        onClose={() => setOpen(false)}
+        anchorEl={anchorEl}
         anchorOrigin={{
           vertical: "top",
           horizontal: "left",
@@ -55,12 +66,7 @@ const AddCard = ({ listId }) => {
             <Button type="submit" variant="contained" color="primary">
               Add card
             </Button>
-            <Button
-              onClick={() => {
-                setOpen(false);
-                setTitle("");
-              }}
-            >
+            <Button aria-describedby={id} type="button" onClick={handleClick}>
               <CloseIcon />
             </Button>
           </div>

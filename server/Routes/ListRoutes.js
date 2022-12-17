@@ -4,6 +4,7 @@ import protect from "../Middleware/AuthMiddleware.js";
 import List from "../Models/ListModel.js";
 import { check, validationResult } from "express-validator";
 import Workspace from "../Models/WorkspaceModel.js";
+import Card from "../Models/CardModel.js";
 
 const listRouter = express.Router();
 
@@ -28,6 +29,7 @@ listRouter.post(
       // Assign list to workspace
       const workspace = await Workspace.findById(workspaceId);
       workspace.lists.push(list.id);
+      await workspace.save();
 
       res.json(list);
     } catch (err) {
@@ -126,6 +128,36 @@ listRouter.patch(
       await workspace.save();
 
       res.send(workspace.lists);
+    } catch (err) {
+      res.status(500);
+      throw new Error(err.message);
+    }
+  })
+);
+
+// DELETE LIST
+listRouter.delete(
+  "/:id",
+  protect,
+  asyncHandler(async (req, res) => {
+    try {
+      const list = await List.findById(req.params.id);
+      const workspaceId = req.header("workspaceId");
+      const workspace = await Workspace.findById(workspaceId);
+
+      if (!list) {
+        return res.status(404).json({ message: "List not found" });
+      }
+
+      list.cards.splice(list.cards.indexOf(req.params.id), 1);
+      workspace.lists.splice(workspace.lists.indexOf(req.params.id), 1);
+      await list.cards.remove();
+      await list.remove();
+
+      await workspace.save();
+      console.log(workspace);
+
+      res.json(req.params.id);
     } catch (err) {
       res.status(500);
       throw new Error(err.message);

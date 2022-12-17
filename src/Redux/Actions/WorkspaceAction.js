@@ -3,6 +3,8 @@ import {
   ADD_CARD,
   ADD_LIST,
   ADD_WORKSPACE,
+  DELETE_CARD,
+  DELETE_LIST,
   GET_CARD,
   GET_LIST,
   GET_WORKSPACE,
@@ -39,7 +41,6 @@ export const getWorkspace = (id) => async (dispatch, getState) => {
       type: GET_WORKSPACE,
       payload: { ...res.data, listObjects: [], cardObjects: [] },
     });
-    localStorage.setItem("workspace", JSON.stringify(res.data));
   } catch (error) {
     const message =
       error.response && error.response.data.message
@@ -69,7 +70,6 @@ export const getWorkspaces = () => async (dispatch, getState) => {
       type: GET_WORKSPACES,
       payload: res.data,
     });
-    localStorage.setItem("workspace", JSON.stringify(res.data));
   } catch (error) {
     const message =
       error.response && error.response.data.message
@@ -102,7 +102,7 @@ export const addWorkspace = (formData, history) => async (dispatch, getState) =>
         payload: res.data,
       });
 
-      history.push(`${URL}/api/workspaces/${res.data.id}`);
+      history.push(`${URL}/api/workspaces/${res.data._id}`);
     } catch (error) {
       const message =
         error.response && error.response.data.message
@@ -241,6 +241,32 @@ export const moveList = (listId, formData) => async (dispatch, getState) => {
   }
 };
 
+// DELETE LIST
+export const deleteList = (listId) => async (dispatch, getState) => {
+  try {
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const res = await axios.delete(`${URL}/api/lists/${listId}`, config);
+
+    dispatch({ type: DELETE_LIST, payload: res.data });
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    throw new Error(message);
+  }
+};
+
 // GET CARD
 export const getCard = (id) => async (dispatch, getState) => {
   try {
@@ -331,6 +357,35 @@ export const moveCard = (cardId, formData) => async (dispatch, getState) => {
       type: MOVE_CARD,
       payload: res.data,
     });
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    throw new Error(message);
+  }
+};
+
+// DELETE CARD
+export const deleteCard = (listId, cardId) => async (dispatch, getState) => {
+  try {
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const res = await axios.delete(
+      `${URL}/api/cards/${listId}/${cardId}`,
+      config
+    );
+
+    dispatch({ type: DELETE_CARD, payload: res.date });
   } catch (error) {
     const message =
       error.response && error.response.data.message

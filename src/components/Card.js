@@ -3,6 +3,7 @@ import "../Styles/components/header.scss";
 import { Draggable } from "react-beautiful-dnd";
 import PropTypes from "prop-types";
 import CloseIcon from "@mui/icons-material/Close";
+import DeleteIcon from "@mui/icons-material/Delete";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -21,8 +22,6 @@ const Card = ({ cardId, list, index }) => {
       (object) => object._id === cardId
     )
   );
-
-  console.log(card);
 
   useEffect(() => {
     dispatch(getCard(cardId));
@@ -49,9 +48,16 @@ const Card = ({ cardId, list, index }) => {
     <Box sx={style}>
       <div className="modal-top">
         <div id="modal-modal-title" className="d-flex justify-content-between">
-          <Typography variant="h6" component="h2">
-            Create new workspace
-          </Typography>
+          <div>
+            <Typography variant="h6" component="h2">
+              Card <strong>{title}</strong> in list{" "}
+              <strong>{list.title}</strong>
+            </Typography>
+            <Button>
+              <DeleteIcon />
+              Delete card
+            </Button>
+          </div>
           <Button onClick={() => setOpen(false)}>
             <CloseIcon />
           </Button>
@@ -62,10 +68,10 @@ const Card = ({ cardId, list, index }) => {
             margin="normal"
             required
             fullWidth
-            label="Add workspace title"
+            label="Add a more detailed description..."
             autoFocus
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            //onChange={(e) => setTitle(e.target.value)}
           />
           <Button type="submit" fullWidth variant="contained" color="primary">
             Create Workspace
@@ -79,7 +85,7 @@ const Card = ({ cardId, list, index }) => {
     <Draggable draggableId={cardId} index={index}>
       {(provided) => (
         <div
-          className="list-card"
+          className="list-card text-center"
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
@@ -92,6 +98,9 @@ const Card = ({ cardId, list, index }) => {
             onClose={() => setOpen(false)}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
+            cardId={cardId}
+            card={card}
+            list={list}
           >
             {body}
           </Modal>

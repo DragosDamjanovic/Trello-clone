@@ -13,7 +13,7 @@
       margin-left: 12px;
     }
 
-    .lists-wrapper {
+    .list-wrapper {
       box-sizing: border-box;
       display: inline-block;
       height: 100%;
@@ -33,21 +33,16 @@
 
         .list-header {
           flex: 0 0 auto;
-          height: 30px;
           padding: 10px 8px;
-          position: relative;
 
           .list-title {
-            bottom: 0;
             cursor: pointer;
             left: 0;
-            position: absolute;
             right: 0;
             top: 0;
             font-size: 20px;
             line-height: 24px;
             font-weight: 600;
-            margin: 0 0 12px;
           }
 
           .list-title-textarea {
