@@ -26,7 +26,11 @@ export const getWorkspace = (id) => async (dispatch, getState) => {
 
     const config = {
       headers: {
+        Accept: "application/json",
         "Content-Type": "application/json",
+
+        "Access-Control-Allow-Origin": "https://developer.mozilla.org",
+        Vary: "Origin",
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
@@ -60,7 +64,11 @@ export const getWorkspaces = () => async (dispatch, getState) => {
 
     const config = {
       headers: {
+        Accept: "application/json",
         "Content-Type": "application/json",
+
+        "Access-Control-Allow-Origin": "https://developer.mozilla.org",
+        Vary: "Origin",
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
@@ -91,7 +99,11 @@ export const addWorkspace = (formData, history) => async (dispatch, getState) =>
 
       const config = {
         headers: {
+          Accept: "application/json",
           "Content-Type": "application/json",
+
+          "Access-Control-Allow-Origin": "https://developer.mozilla.org",
+          Vary: "Origin",
           Authorization: `Bearer ${userInfo.token}`,
         },
       };
@@ -122,7 +134,11 @@ export const getList = (id) => async (dispatch, getState) => {
 
     const config = {
       headers: {
+        Accept: "application/json",
         "Content-Type": "application/json",
+
+        "Access-Control-Allow-Origin": "https://developer.mozilla.org",
+        Vary: "Origin",
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
@@ -152,7 +168,11 @@ export const addList = (formData) => async (dispatch, getState) => {
 
     const config = {
       headers: {
+        Accept: "application/json",
         "Content-Type": "application/json",
+
+        "Access-Control-Allow-Origin": "https://developer.mozilla.org",
+        Vary: "Origin",
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
@@ -183,7 +203,11 @@ export const renameList = (listId, formData) => async (dispatch, getState) => {
 
     const config = {
       headers: {
+        Accept: "application/json",
         "Content-Type": "application/json",
+
+        "Access-Control-Allow-Origin": "https://developer.mozilla.org",
+        Vary: "Origin",
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
@@ -218,7 +242,11 @@ export const moveList = (listId, formData) => async (dispatch, getState) => {
 
     const config = {
       headers: {
+        Accept: "application/json",
         "Content-Type": "application/json",
+
+        "Access-Control-Allow-Origin": "https://developer.mozilla.org",
+        Vary: "Origin",
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
@@ -251,7 +279,11 @@ export const deleteList = (listId) => async (dispatch, getState) => {
 
     const config = {
       headers: {
+        Accept: "application/json",
         "Content-Type": "application/json",
+
+        "Access-Control-Allow-Origin": "https://developer.mozilla.org",
+        Vary: "Origin",
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
@@ -277,7 +309,11 @@ export const getCard = (id) => async (dispatch, getState) => {
 
     const config = {
       headers: {
+        Accept: "application/json",
         "Content-Type": "application/json",
+
+        "Access-Control-Allow-Origin": "https://developer.mozilla.org",
+        Vary: "Origin",
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
@@ -310,7 +346,11 @@ export const addCard = (formData) => async (dispatch, getState) => {
 
     const config = {
       headers: {
+        Accept: "application/json",
         "Content-Type": "application/json",
+
+        "Access-Control-Allow-Origin": "https://developer.mozilla.org",
+        Vary: "Origin",
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
@@ -343,7 +383,11 @@ export const moveCard = (cardId, formData) => async (dispatch, getState) => {
 
     const config = {
       headers: {
+        Accept: "application/json",
         "Content-Type": "application/json",
+
+        "Access-Control-Allow-Origin": "https://developer.mozilla.org",
+        Vary: "Origin",
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
@@ -376,7 +420,11 @@ export const deleteCard = (listId, cardId) => async (dispatch, getState) => {
 
     const config = {
       headers: {
+        Accept: "application/json",
         "Content-Type": "application/json",
+
+        "Access-Control-Allow-Origin": "https://developer.mozilla.org",
+        Vary: "Origin",
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
@@ -405,7 +453,11 @@ export const editCard = (cardId, formData) => async (dispatch, getState) => {
 
     const config = {
       headers: {
+        Accept: "application/json",
         "Content-Type": "application/json",
+
+        "Access-Control-Allow-Origin": "https://developer.mozilla.org",
+        Vary: "Origin",
         Authorization: `Bearer ${userInfo.token}`,
       },
     };

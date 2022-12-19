@@ -20,7 +20,10 @@ export const login = (email, password) => async (dispatch) => {
     dispatch({ type: USER_LOGIN_REQUEST });
     const config = {
       headers: {
+        "Access-Control-Allow-Origin": "https://developer.mozilla.org",
+        Vary: "Origin",
         "Content-Type": "application/json",
+        Accept: "application/json",
       },
     };
     const { data } = await axios.post(
@@ -95,6 +98,9 @@ export const register = (name, email, password) => async (dispatch) => {
     const config = {
       headers: {
         "Content-Type": "application/json",
+        Accept: "application/json",
+        "Access-Control-Allow-Origin": "https://developer.mozilla.org",
+        Vary: "Origin",
       },
     };
     const { data } = await axios.post(

@@ -1,6 +1,7 @@
 {
   "name": "trello-clone",
   "version": "0.1.0",
+  "homepage": "http://dragos.infopuls.net",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.5",
