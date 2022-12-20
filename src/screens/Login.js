@@ -1,13 +1,12 @@
 import React, { useState } from "react";
-import "../Styles/pages/login2.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Navigate } from "react-router-dom";
 import { login } from "../Redux/Actions/UserAction";
-import Message from "./../components/LoadingError/Error";
-import Loading from "../components/LoadingError/Loading";
-import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import PersonIcon from "@mui/icons-material/Person";
+import { Container } from "@mui/system";
+import { Avatar, CssBaseline, Grid, Typography } from "@mui/material";
 
 const Login = () => {
   window.scrollTo(0, 0);
@@ -28,69 +27,87 @@ const Login = () => {
     return <Navigate to="/dashboard" />;
   }
 
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    boxShadow: 24,
+    p: 4,
+    form: {
+      width: "100%", // Fix IE 11 issue.
+      marginTop: "10px",
+    },
+    submit: {
+      margin: "10px",
+    },
+  };
+
   return (
     <>
-      <div className="container d-flex flex-column justify-content-center align-items-center login-center">
-        {error && <Message variant="alert-danger">{error}</Message>}
-        {loading && <Loading />}
-        <div className="col-6 d-flex flex-column align-items-center justify-content-center">
-          <header className="logo-wrapper text-center">
-            <div className="logo d-inline-block">
-              <img src="../../public/trello-logo.jpg" alt="Trello logo" />
-            </div>
-          </header>
-          <section className="form-wrapper col-7 d-flex flex-column align-items-center">
-            <div className="d-flex align-items-center text-center mb-2">
-              <h5>Log in to continue</h5>
-            </div>
-
-            <Box
-              component="form"
-              autoComplete="off"
-              className="Login col-10 d-flex flex-column align-items-center"
-              id="loginForm"
-              onSubmit={submitHandler}
-            >
-              <TextField
-                required
-                className="mb-4"
-                fullWidth
-                type="email"
-                label="Email"
-                value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                }}
-              />
-
-              <TextField
-                required
-                className="mb-4"
-                fullWidth
-                type="password"
-                label="Password"
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                }}
-              />
-
+      <Container component="main" maxWidth="xs" sx={style}>
+        <CssBaseline />
+        <div className="d-flex flex-column justify-content-center align-items-center">
+          <Avatar></Avatar>
+          <Typography component="h1" variant="h5">
+            Sign in
+          </Typography>
+          <form onSubmit={submitHandler}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  autoComplete="email"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  autoComplete="current-password"
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                  }}
+                />
+              </Grid>
+            </Grid>
+            <div className="mt-4">
               <Button
                 type="submit"
                 fullWidth
-                color="primary"
                 variant="contained"
-                className="text-center"
+                color="primary"
               >
-                Login
+                Log in
               </Button>
-              <p>
-                <Link to={"/register"}>Create Account</Link>
-              </p>
-            </Box>
-          </section>
+            </div>
+            <Grid container justify="flex-end">
+              <Grid item>
+                <Link to={"/register"} variant="body2">
+                  Don't have an account? Sign up
+                </Link>
+              </Grid>
+            </Grid>
+          </form>
         </div>
-      </div>
+      </Container>
     </>
   );
 };

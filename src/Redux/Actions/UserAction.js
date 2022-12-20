@@ -88,7 +88,6 @@ export const logout = () => (dispatch) => {
   localStorage.removeItem("transactionList");
   dispatch({ type: USER_LOGOUT });
   dispatch({ type: USER_DETAILS_RESET });
-  //dispatch({ type: TRANSACTION_LIST_MY_RESET });
 };
 
 // REGISTER

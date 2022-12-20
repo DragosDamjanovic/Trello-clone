@@ -63,14 +63,19 @@ const Card = ({ cardId, list, index }) => {
   const body = (
     <Box sx={style}>
       <div className="modal-top">
-        <div id="modal-modal-title" className="d-flex justify-content-between">
+        <div
+          id="modal-modal-title"
+          className="d-flex justify-content-between mb-3"
+        >
           <div>
             <Typography variant="h6" component="h2">
               <VideoLabelIcon /> <strong>{title}</strong>
             </Typography>
-            <Typography variant="h6" component="h2">
-              in list <strong>{list.title}</strong>
-            </Typography>
+            <div className="mx-4">
+              <Typography variant="span" component="h6">
+                in list <strong>{list.title}</strong>
+              </Typography>
+            </div>
           </div>
           <Button onClick={() => setOpen(false)}>
             <CloseIcon />

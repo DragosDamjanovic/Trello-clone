@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useEffect } from "react";
 import "../Styles/pages/trello.scss";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import Header from "../components/Header";

@@ -50,7 +50,11 @@ const AddCard = ({ listId }) => {
           horizontal: "left",
         }}
       >
-        <form onSubmit={(e) => onSubmit(e)}>
+        <form
+          onSubmit={(e) => onSubmit(e)}
+          className="p-2"
+          style={{ width: "248px" }}
+        >
           <TextField
             variant="outlined"
             fullWidth

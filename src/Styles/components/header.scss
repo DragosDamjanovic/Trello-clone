@@ -22,49 +22,5 @@ body {
     padding: 8px 4px 4px 12px;
     position: relative;
     z-index: 0;
-
-    .board-header-btn {
-      background: #0000;
-      cursor: default;
-      font-size: 18px;
-      font-weight: 700;
-      line-height: 32px;
-      max-width: calc(100% - 24px);
-      overflow: hidden;
-      padding: 0;
-      text-decoration: none;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-
-      h1 {
-        font-size: 18px;
-        font-weight: 700;
-        line-height: 32px;
-        padding: 0 12px;
-      }
-    }
-
-    .board-header-user {
-      float: right;
-      display: block;
-      position: relative;
-
-      .board-header-member {
-        display: block;
-        position: relative;
-
-        .btn-member-count {
-          border: 0;
-          border-radius: 14px;
-          font-size: 12px;
-          height: 28px;
-          line-height: 28px;
-          margin-left: -2px;
-          margin-right: 4px;
-          margin-top: 2px;
-          padding: 0 8px;
-        }
-      }
-    }
   }
 }
