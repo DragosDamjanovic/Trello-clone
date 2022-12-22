@@ -12,6 +12,7 @@ import {
   MOVE_CARD,
   MOVE_LIST,
   RENAME_LIST,
+  WORKSPACE_ERROR,
 } from "../Constants/WorkspaceConstants";
 
 export const WorkspaceReducer = (
@@ -25,7 +26,8 @@ export const WorkspaceReducer = (
       return { ...state, workspace: { ...state.workspace, ...action.payload } };
     case ADD_WORKSPACE:
       return { ...state, workspaces: [action.payload, ...state.workspaces] };
-
+    case WORKSPACE_ERROR:
+      return { ...state, error: action.payload };
     case GET_LIST:
       return {
         ...state,
@@ -67,6 +69,7 @@ export const WorkspaceReducer = (
         ...state,
         workspace: {
           ...state.workspace,
+          // Filter lists and list objects to remove deleted list
           lists: state.workspace.lists.filter((id) => id !== action.payload),
           listObjects: state.workspace.listObjects.filter(
             (list) => list._id !== action.payload
@@ -86,6 +89,7 @@ export const WorkspaceReducer = (
         ...state,
         workspace: {
           ...state.workspace,
+          // Find list to add card to and add card ID to its cards array
           listObjects: state.workspace.listObjects.map((list) =>
             list._id === action.payload.listId
               ? { ...list, cards: [...list.cards, action.payload.cardId] }
@@ -98,17 +102,12 @@ export const WorkspaceReducer = (
         ...state,
         workspace: {
           ...state.workspace,
-          listObjects: state.workspace.listObjects.map((list) =>
-            list._id === action.payload.from._id
-              ? action.payload.from
-              : list._id === action.payload.to._id
-              ? action.payload.to
-              : list
-          ),
+          // Find lists to move card between and update their cards arrays and metadata
           listObjects: state.workspace.listObjects.map((list) => {
             if (list._id === action.payload.from._id) {
               return {
                 ...list,
+                ...action.payload.from,
                 cards: list.cards.filter(
                   (cardId) => cardId !== action.payload.cardId
                 ),
@@ -116,12 +115,14 @@ export const WorkspaceReducer = (
             } else if (list._id === action.payload.to._id) {
               return {
                 ...list,
+                ...action.payload.to,
                 cards: [...list.cards, action.payload.cardId],
               };
             } else {
               return list;
             }
           }),
+          // Filter card objects to remove moved card unless it's being moved within the same list
           cardObjects: state.workspace.cardObjects.filter(
             (card) =>
               card._id !== action.payload.cardId ||
@@ -134,9 +135,11 @@ export const WorkspaceReducer = (
         ...state,
         workspace: {
           ...state.workspace,
+          // Filter card objects to remove deleted card
           cardObjects: state.workspace.cardObjects.filter(
             (card) => card._id !== action.payload
           ),
+          // Find list containing deleted card and remove card ID from its cards array
           listObjects: state.workspace.listObjects.filter((list) =>
             list.cards.includes(action.payload)
               ? {
@@ -152,6 +155,7 @@ export const WorkspaceReducer = (
         ...state,
         workspace: {
           ...state.workspace,
+          // Find card to update and replace its data with new data from action payload
           cardObjects: state.workspace.cardObjects.map((card) =>
             card._id === action.payload._id ? action.payload : card
           ),

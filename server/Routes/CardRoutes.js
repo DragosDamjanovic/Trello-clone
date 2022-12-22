@@ -48,11 +48,13 @@ cardRouter.get(
   protect,
   asyncHandler(async (req, res) => {
     try {
+      // Find list by ID from request parameters
       const list = await List.findById(req.params.listId);
       if (!list) {
         return res.status(404).json({ message: "List not found" });
       }
 
+      // Find cards in list by ID and store in array
       const cards = [];
       for (const cardId of list.cards) {
         cards.push(await List.findById(cardId));

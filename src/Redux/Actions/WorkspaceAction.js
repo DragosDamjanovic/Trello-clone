@@ -13,9 +13,9 @@ import {
   MOVE_CARD,
   MOVE_LIST,
   RENAME_LIST,
+  WORKSPACE_ERROR,
 } from "../Constants/WorkspaceConstants";
 import { URL } from "../Url";
-import { logout } from "./UserAction";
 
 // GET WORKSPACE
 export const getWorkspace = (id) => async (dispatch, getState) => {
@@ -47,11 +47,13 @@ export const getWorkspace = (id) => async (dispatch, getState) => {
       payload: { ...res.data, listObjects: [], cardObjects: [] },
     });
   } catch (error) {
-    const message =
-      error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message;
-    throw new Error(message);
+    dispatch({
+      type: WORKSPACE_ERROR,
+      payload: {
+        message: error.response.statusText,
+        status: error.response.status,
+      },
+    });
   }
 };
 
@@ -80,11 +82,13 @@ export const getWorkspaces = () => async (dispatch, getState) => {
       payload: res.data,
     });
   } catch (error) {
-    const message =
-      error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message;
-    throw new Error(message);
+    dispatch({
+      type: WORKSPACE_ERROR,
+      payload: {
+        message: error.response.statusText,
+        status: error.response.status,
+      },
+    });
   }
 };
 
@@ -117,11 +121,13 @@ export const addWorkspace = (formData, history) => async (dispatch, getState) =>
 
       history.push(`${URL}/api/workspaces/${res.data._id}`);
     } catch (error) {
-      const message =
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message;
-      throw new Error(message);
+      dispatch({
+        type: WORKSPACE_ERROR,
+        payload: {
+          message: error.response.statusText,
+          status: error.response.status,
+        },
+      });
     }
   };
 
@@ -150,11 +156,13 @@ export const getList = (id) => async (dispatch, getState) => {
       payload: res.data,
     });
   } catch (error) {
-    const message =
-      error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message;
-    throw new Error(message);
+    dispatch({
+      type: WORKSPACE_ERROR,
+      payload: {
+        message: error.response.statusText,
+        status: error.response.status,
+      },
+    });
   }
 };
 
@@ -183,14 +191,13 @@ export const addList = (formData) => async (dispatch, getState) => {
       payload: res.data,
     });
   } catch (error) {
-    const message =
-      error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message;
-    throw new Error(message);
-    // if (message === "Not authorized, token failed") {
-    //   dispatch(logout());
-    // }
+    dispatch({
+      type: WORKSPACE_ERROR,
+      payload: {
+        message: error.response.statusText,
+        status: error.response.status,
+      },
+    });
   }
 };
 
@@ -223,11 +230,13 @@ export const renameList = (listId, formData) => async (dispatch, getState) => {
       payload: res.data,
     });
   } catch (error) {
-    const message =
-      error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message;
-    throw new Error(message);
+    dispatch({
+      type: WORKSPACE_ERROR,
+      payload: {
+        message: error.response.statusText,
+        status: error.response.status,
+      },
+    });
   }
 };
 
@@ -262,11 +271,13 @@ export const moveList = (listId, formData) => async (dispatch, getState) => {
       payload: res.data,
     });
   } catch (error) {
-    const message =
-      error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message;
-    throw new Error(message);
+    dispatch({
+      type: WORKSPACE_ERROR,
+      payload: {
+        message: error.response.statusText,
+        status: error.response.status,
+      },
+    });
   }
 };
 
@@ -292,11 +303,13 @@ export const deleteList = (listId) => async (dispatch, getState) => {
 
     dispatch({ type: DELETE_LIST, payload: res.data });
   } catch (error) {
-    const message =
-      error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message;
-    throw new Error(message);
+    dispatch({
+      type: WORKSPACE_ERROR,
+      payload: {
+        message: error.response.statusText,
+        status: error.response.status,
+      },
+    });
   }
 };
 
@@ -325,14 +338,13 @@ export const getCard = (id) => async (dispatch, getState) => {
       payload: res.data,
     });
   } catch (error) {
-    const message =
-      error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message;
-    throw new Error(message);
-    // if (message === "Not authorized, token failed") {
-    //   dispatch(logout());
-    // }
+    dispatch({
+      type: WORKSPACE_ERROR,
+      payload: {
+        message: error.response.statusText,
+        status: error.response.status,
+      },
+    });
   }
 };
 
@@ -362,14 +374,13 @@ export const addCard = (formData) => async (dispatch, getState) => {
       payload: res.data,
     });
   } catch (error) {
-    const message =
-      error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message;
-    throw new Error(message);
-    // if (message === "Not authorized, token failed") {
-    //   dispatch(logout());
-    // }
+    dispatch({
+      type: WORKSPACE_ERROR,
+      payload: {
+        message: error.response.statusText,
+        status: error.response.status,
+      },
+    });
   }
 };
 
@@ -403,11 +414,13 @@ export const moveCard = (cardId, formData) => async (dispatch, getState) => {
       payload: res.data,
     });
   } catch (error) {
-    const message =
-      error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message;
-    throw new Error(message);
+    dispatch({
+      type: WORKSPACE_ERROR,
+      payload: {
+        message: error.response.statusText,
+        status: error.response.status,
+      },
+    });
   }
 };
 
@@ -436,11 +449,13 @@ export const deleteCard = (listId, cardId) => async (dispatch, getState) => {
 
     dispatch({ type: DELETE_CARD, payload: res.date });
   } catch (error) {
-    const message =
-      error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message;
-    throw new Error(message);
+    dispatch({
+      type: WORKSPACE_ERROR,
+      payload: {
+        message: error.response.statusText,
+        status: error.response.status,
+      },
+    });
   }
 };
 
@@ -473,10 +488,12 @@ export const editCard = (cardId, formData) => async (dispatch, getState) => {
       payload: res.data,
     });
   } catch (error) {
-    const message =
-      error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message;
-    throw new Error(message);
+    dispatch({
+      type: WORKSPACE_ERROR,
+      payload: {
+        message: error.response.statusText,
+        status: error.response.status,
+      },
+    });
   }
 };
