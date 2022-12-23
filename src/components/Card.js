@@ -84,7 +84,7 @@ const Card = ({ cardId, list, index }) => {
         <div id="modal-modal-description">
           <Button
             onClick={() => {
-              deleteCardHandler(cardId);
+              deleteCardHandler(list._id, cardId);
               setOpen(false);
             }}
           >

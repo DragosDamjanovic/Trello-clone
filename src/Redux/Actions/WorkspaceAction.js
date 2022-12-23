@@ -447,7 +447,7 @@ export const deleteCard = (listId, cardId) => async (dispatch, getState) => {
       config
     );
 
-    dispatch({ type: DELETE_CARD, payload: res.date });
+    dispatch({ type: DELETE_CARD, payload: res.data });
   } catch (error) {
     dispatch({
       type: WORKSPACE_ERROR,

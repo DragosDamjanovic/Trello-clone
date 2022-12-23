@@ -140,7 +140,7 @@ export const WorkspaceReducer = (
             (card) => card._id !== action.payload
           ),
           // Find list containing deleted card and remove card ID from its cards array
-          listObjects: state.workspace.listObjects.filter((list) =>
+          listObjects: state.workspace.listObjects.map((list) =>
             list.cards.includes(action.payload)
               ? {
                   ...list,
