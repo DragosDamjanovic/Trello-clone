@@ -52,7 +52,7 @@ const Trello = () => {
           <Droppable droppableId="all-lists" direction="horizontal" type="list">
             {(provided) => (
               <div
-                className="board row mx-3 mt-2"
+                className="board mx-3 mt-2"
                 ref={provided.innerRef}
                 {...provided.droppableProps}
               >

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../Styles/components/header.scss";
 import { Draggable } from "react-beautiful-dnd";
 import PropTypes from "prop-types";
@@ -17,10 +17,12 @@ import {
   editCard,
   getCard,
 } from "../Redux/Actions/WorkspaceAction";
+import ListItemText from "@mui/material/ListItemText";
 
 const Card = ({ cardId, list, index }) => {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
+  const [editing, setEditing] = useState(false);
   const [description, setDescription] = useState("");
   const dispatch = useDispatch();
   const card = useSelector((state) =>
@@ -43,6 +45,7 @@ const Card = ({ cardId, list, index }) => {
   const onSubmit = async (e) => {
     e.preventDefault();
     dispatch(editCard(card._id, { title, description }));
+    setEditing(false);
   };
 
   const deleteCardHandler = async (e) => {
@@ -59,7 +62,7 @@ const Card = ({ cardId, list, index }) => {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: 400,
+    width: 600,
     bgcolor: "background.paper",
     boxShadow: 24,
     p: 4,
@@ -72,11 +75,14 @@ const Card = ({ cardId, list, index }) => {
           id="modal-modal-title"
           className="d-flex justify-content-between mb-3"
         >
-          <div>
-            <Typography variant="h6" component="h2">
-              <VideoLabelIcon /> <strong>{title}</strong>
-            </Typography>
-            <div className="mx-4">
+          <div className="row d-flex flex-row">
+            <span className="col-3">
+              <VideoLabelIcon />
+            </span>
+            <div className="col-9">
+              <Typography variant="h6" component="h2">
+                <strong>{title}</strong>
+              </Typography>
               <Typography variant="span" component="h6">
                 in list <strong>{list.title}</strong>
               </Typography>
@@ -87,34 +93,57 @@ const Card = ({ cardId, list, index }) => {
           </Button>
         </div>
         <div id="modal-modal-description">
-          <Button
-            onClick={() => {
-              deleteCardHandler(list._id, cardId);
-              setOpen(false);
-            }}
-          >
-            <DeleteIcon />
-            Delete card
-          </Button>
-          <form onSubmit={(e) => onSubmit(e)}>
-            <Typography variant="h6" component="h2">
-              <DescriptionIcon /> Description
-            </Typography>
-
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              label="Add a more detailed description..."
-              autoFocus
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
-            <Button type="submit" variant="contained" color="primary">
-              Save
-            </Button>
-          </form>
+          <div className="row d-flex flex-row">
+            <span className="col-1">
+              <DescriptionIcon />
+            </span>
+            <div className="col-10">
+              <Typography variant="h6" component="h2">
+                <strong>Description</strong>
+              </Typography>
+              {!editing ? (
+                <div className="row">
+                  <div className="col-8">
+                    <ListItemText>{description}</ListItemText>
+                    <Button onClick={setEditing(true)}>Edit</Button>
+                  </div>
+                </div>
+              ) : (
+                <form onSubmit={(e) => onSubmit(e)}>
+                  <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    label="Add a more detailed description..."
+                    autoFocus
+                    multiline
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                  />
+                  <Button type="submit" variant="contained" color="primary">
+                    Save
+                  </Button>
+                </form>
+              )}
+            </div>
+          </div>
+          <div className="row mt-3">
+            <div className="col-1"></div>
+            <div className="col-11">
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => {
+                  deleteCardHandler(list._id, cardId);
+                  setOpen(false);
+                }}
+              >
+                <DeleteIcon />
+                Delete card
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
     </Box>

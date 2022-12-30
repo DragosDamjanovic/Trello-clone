@@ -1,13 +1,21 @@
 .board-canvas {
   position: relative;
+  display: flex;
+  flex-grow: 1;
+  height: calc(100vh - 72px);
+  width: 100%;
 
   .board {
     left: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
     margin-bottom: 8px;
     padding-bottom: 8px;
     position: absolute;
     right: 0;
     top: 0;
+    height: 100%;
 
     .list-wrapper:first-child {
       margin-left: 12px;
@@ -16,10 +24,10 @@
     .list-wrapper {
       box-sizing: border-box;
       display: inline-block;
-      height: 100%;
+      float: none;
       margin: 0 4px;
-      vertical-align: top;
       white-space: nowrap;
+      vertical-align: top;
       width: 272px;
 
       .list-content {
@@ -107,6 +115,12 @@
   }
 
   .add-list {
+    box-sizing: border-box;
+    display: inline-block;
+    float: none;
+    white-space: nowrap;
+    vertical-align: top;
+
     border-radius: 3px;
     height: auto;
     min-height: 32px;

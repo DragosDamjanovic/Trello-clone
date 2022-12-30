@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import "../Styles/pages/dashboard.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import CreateWorkspace from "../components/CreateWorkspace";
 import Header from "../components/Header";
 import { getWorkspaces } from "../Redux/Actions/WorkspaceAction";
