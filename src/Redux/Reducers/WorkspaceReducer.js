@@ -103,25 +103,13 @@ export const WorkspaceReducer = (
         workspace: {
           ...state.workspace,
           // Find lists to move card between and update their cards arrays and metadata
-          listObjects: state.workspace.listObjects.map((list) => {
-            if (list._id === action.payload.from._id) {
-              return {
-                ...list,
-                ...action.payload.from,
-                cards: list.cards.filter(
-                  (cardId) => cardId !== action.payload.cardId
-                ),
-              };
-            } else if (list._id === action.payload.to._id) {
-              return {
-                ...list,
-                ...action.payload.to,
-                cards: [...list.cards, action.payload.cardId],
-              };
-            } else {
-              return list;
-            }
-          }),
+          listObjects: state.workspace.listObjects.map((list) =>
+            list._id === action.payload.from._id
+              ? action.payload.from
+              : list._id === action.payload.to._id
+              ? action.payload.to
+              : list
+          ),
           // Filter card objects to remove moved card unless it's being moved within the same list
           cardObjects: state.workspace.cardObjects.filter(
             (card) =>

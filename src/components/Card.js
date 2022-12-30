@@ -46,7 +46,12 @@ const Card = ({ cardId, list, index }) => {
   };
 
   const deleteCardHandler = async (e) => {
-    dispatch(deleteCard(list._id, cardId));
+    const confirm = window.confirm(
+      "Are you sure you want to delete this card?"
+    );
+    if (confirm) {
+      dispatch(deleteCard(list._id, cardId));
+    }
   };
 
   const style = {

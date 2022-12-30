@@ -6,7 +6,6 @@ import Register from "./screens/Register";
 import Trello from "./screens/Trello";
 import NotFound from "./screens/NotFound";
 import Dashboard from "./screens/Dashboard";
-//import "./Styles/style.scss";
 
 const App = () => {
   return (

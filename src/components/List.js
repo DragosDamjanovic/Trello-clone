@@ -41,7 +41,15 @@ const List = ({ listId, index }) => {
   };
 
   const deleteListHandler = async (e) => {
-    dispatch(deleteList(listId));
+    const confirm = window.confirm(
+      "Are you sure you want to delete this list?",
+      {
+        className: "prompt",
+      }
+    );
+    if (confirm) {
+      dispatch(deleteList(listId));
+    }
   };
 
   return (
@@ -91,7 +99,7 @@ const List = ({ listId, index }) => {
                   {(provided) => (
                     <>
                       <div
-                        className="list-cards row"
+                        className="list-cards row p-2"
                         {...provided.droppableProps}
                         ref={provided.innerRef}
                       >
