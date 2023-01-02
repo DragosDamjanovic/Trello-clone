@@ -53,7 +53,7 @@ const AddList = ({ workspaceId }) => {
         <form
           onSubmit={(e) => onSubmit(e)}
           className="p-2"
-          style={{ width: "303px" }}
+          style={{ width: "284px" }}
         >
           <TextField
             variant="outlined"

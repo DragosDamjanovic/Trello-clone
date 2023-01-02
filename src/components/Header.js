@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../Styles/components/header.scss";
 import { useDispatch, useSelector } from "react-redux";
 import Avatar from "@mui/material/Avatar";
@@ -6,10 +6,20 @@ import CloseIcon from "@mui/icons-material/Close";
 import { Button, Popover } from "@mui/material";
 import { logout } from "../Redux/Actions/UserAction";
 import { Navigate } from "react-router-dom";
+import { getWorkspaces } from "../Redux/Actions/WorkspaceAction";
+import DropDown from "./DropDown";
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState(null);
+
   const dispatch = useDispatch();
+
+  const workspaces = useSelector((state) => state.workspace.workspaces);
+  const workspace = useSelector((state) => state.workspace.workspace);
+
+  useEffect(() => {
+    dispatch(getWorkspaces());
+  }, [dispatch]);
 
   const handleClick = (event) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
@@ -30,20 +40,14 @@ const Header = () => {
   function stringToColor(string) {
     let hash = 0;
     let i;
-
-    /* eslint-disable no-bitwise */
     for (i = 0; i < string.length; i += 1) {
       hash = string.charCodeAt(i) + ((hash << 5) - hash);
     }
-
     let color = "#";
-
     for (i = 0; i < 3; i += 1) {
       const value = (hash >> (i * 8)) & 0xff;
       color += `00${value.toString(16)}`.slice(-2);
     }
-    /* eslint-enable no-bitwise */
-
     return color;
   }
 
@@ -62,9 +66,17 @@ const Header = () => {
 
   return (
     <div className="board-header d-flex flex-row justify-content-between">
-      <div className="board-header-btn col-3">
-        <h2>Trello clone</h2>
+      <div className="col-4 d-flex flex-row justify-content-start">
+        <a href="/" className="trello-logo-link row-1">
+          <div className="trello-logo"></div>
+        </a>
+        <div className="row-3">
+          {workspace ? (
+            <DropDown workspace={workspace} workspaces={workspaces} />
+          ) : null}
+        </div>
       </div>
+
       <div className="board-header-user col-1">
         <div className="board-header-member ">
           <Button

@@ -76,7 +76,7 @@ const Card = ({ cardId, list, index }) => {
           className="d-flex justify-content-between mb-3"
         >
           <div className="row d-flex flex-row">
-            <span className="col-3">
+            <span className="col-3 mt-1">
               <VideoLabelIcon />
             </span>
             <div className="col-9">
@@ -95,7 +95,7 @@ const Card = ({ cardId, list, index }) => {
         <div id="modal-modal-description">
           <div className="row d-flex flex-row">
             <span className="col-1">
-              <DescriptionIcon />
+              <DescriptionIcon className="mt-1" />
             </span>
             <div className="col-10">
               <Typography variant="h6" component="h2">
@@ -153,7 +153,7 @@ const Card = ({ cardId, list, index }) => {
     <Draggable draggableId={cardId} index={index}>
       {(provided) => (
         <div
-          className="list-card text-center"
+          className="list-card"
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
@@ -161,6 +161,7 @@ const Card = ({ cardId, list, index }) => {
           <Button className="card" onClick={() => setOpen(true)}>
             {title}
           </Button>
+          {!description ? null : <DescriptionIcon className="mt-2" />}
           <Modal
             open={open}
             onClose={() => setOpen(false)}
