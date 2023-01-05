@@ -4,56 +4,44 @@ import { addList } from "../Redux/Actions/WorkspaceAction";
 import TextField from "@mui/material/TextField";
 import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
-import { Button, Popover } from "@mui/material";
+import { Button } from "@mui/material";
 
 const AddList = ({ workspaceId }) => {
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const dispatch = useDispatch();
 
-  const handleClick = (event) => {
-    setAnchorEl(anchorEl ? null : event.currentTarget);
+  const handleClick = (e) => {
+    e.preventDefault();
+    setOpen(true);
+  };
+
+  const handleClose = (e) => {
+    e.preventDefault();
+    setOpen(false);
   };
 
   const onSubmit = async (e) => {
     e.preventDefault();
     dispatch(addList({ title, workspaceId }));
     handleClick(e);
+    setOpen(false);
     setTitle("");
   };
 
-  const open = Boolean(anchorEl);
-  const id = open ? "simple-popover" : undefined;
-
   return (
     <>
-      <div className="add-list col-2">
-        <Button
-          className="open-add-list"
-          aria-describedby={id}
-          type="button"
-          onClick={handleClick}
-        >
-          <AddIcon /> Add another list
-        </Button>
-      </div>
-      <Popover
-        id={id}
-        open={open}
-        anchorEl={anchorEl}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "left",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "left",
-        }}
-      >
+      {!open ? (
+        <div className="add-list" style={{ width: "272px" }}>
+          <Button className="open-add-list" type="button" onClick={handleClick}>
+            <AddIcon /> Add another list
+          </Button>
+        </div>
+      ) : (
         <form
           onSubmit={(e) => onSubmit(e)}
-          className="p-2"
-          style={{ width: "284px" }}
+          className="add-list-form p-2"
+          style={{ width: "272px" }}
         >
           <TextField
             variant="outlined"
@@ -69,13 +57,48 @@ const AddList = ({ workspaceId }) => {
             <Button type="submit" variant="contained" color="primary">
               Add list
             </Button>
-            <Button aria-describedby={id} type="button" onClick={handleClick}>
+            <Button type="button" onClick={handleClose}>
               <CloseIcon />
             </Button>
           </div>
         </form>
-      </Popover>
+      )}
     </>
+    // {!open ? (
+    //     <div className="add-card row">
+    //       <Button className="open-add-card" type="button" onClick={handleClick}>
+    //         <AddIcon /> Add card
+    //       </Button>
+    //     </div>
+    //   ) : (
+    //     <div>
+    //       <form
+    //         onSubmit={(e) => onSubmit(e)}
+    //         className="p-2"
+    //         style={{ width: "272px" }}
+    //       >
+    //         <TextField
+    //           variant="outlined"
+    //           fullWidth
+    //           margin="normal"
+    //           required
+    //           label="Enter a title for this card..."
+    //           autoFocus
+    //           value={title}
+    //           onChange={(e) => setTitle(e.target.value)}
+    //           onKeyPress={(e) => e.key === "Enter" && onSubmit(e)}
+    //         />
+    //         <div className="add-card-controls">
+    //           <Button type="submit" variant="contained" color="primary">
+    //             Add card
+    //           </Button>
+    //           <Button type="button" onClick={handleClose}>
+    //             <CloseIcon />
+    //           </Button>
+    //         </div>
+    //       </form>
+    //     </div>
+    //   )}
   );
 };
 

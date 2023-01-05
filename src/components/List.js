@@ -9,7 +9,8 @@ import {
   renameList,
 } from "../Redux/Actions/WorkspaceAction";
 import AddCard from "./AddCard";
-import Button from "@mui/material/Button";
+import { message, Popconfirm } from "antd";
+import { Button } from "antd";
 import CloseIcon from "@mui/icons-material/Close";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 
@@ -40,16 +41,14 @@ const List = ({ listId, index }) => {
     setEditing(false);
   };
 
-  const deleteListHandler = async (e) => {
-    const confirm = window.confirm(
-      "Are you sure you want to delete this list?",
-      {
-        className: "prompt",
-      }
-    );
-    if (confirm) {
-      dispatch(deleteList(listId));
-    }
+  const confirm = (e) => {
+    console.log(e);
+    message.success("The list has been deleted");
+    dispatch(deleteList(listId));
+  };
+  const cancel = (e) => {
+    console.log(e);
+    message.error("Click on No");
   };
 
   return (
@@ -72,9 +71,18 @@ const List = ({ listId, index }) => {
                     {title}
                   </div>
                   <div className="col-4">
-                    <Button onClick={() => deleteListHandler(listId)}>
-                      <CloseIcon />
-                    </Button>
+                    <Popconfirm
+                      title="Delete the list"
+                      description="Are you sure you want to delete this list?"
+                      onConfirm={confirm}
+                      onCancel={cancel}
+                      okText="Yes"
+                      cancelText="No"
+                    >
+                      <Button type="link">
+                        <CloseIcon />
+                      </Button>
+                    </Popconfirm>
                   </div>
                 </>
               ) : (

@@ -4,10 +4,9 @@ import { addCard } from "../Redux/Actions/WorkspaceAction";
 import TextField from "@mui/material/TextField";
 import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
-import { Button, Popover } from "@mui/material";
+import { Button } from "@mui/material";
 
 const AddCard = ({ listId }) => {
-  const [anchorEl, setAnchorEl] = useState(null);
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const dispatch = useDispatch();
@@ -29,19 +28,11 @@ const AddCard = ({ listId }) => {
     setTitle("");
   };
 
-  //const open = Boolean(anchorEl);
-  const id = open ? "simple-popover" : undefined;
-
   return (
     <>
       {!open ? (
         <div className="add-card row">
-          <Button
-            className="open-add-card"
-            aria-describedby={id}
-            type="button"
-            onClick={handleClick}
-          >
+          <Button className="open-add-card" type="button" onClick={handleClick}>
             <AddIcon /> Add card
           </Button>
         </div>

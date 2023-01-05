@@ -100,6 +100,7 @@
               text-transform: lowercase;
               color: #5e6c84;
               width: 50%;
+              border: none;
             }
           }
         }
@@ -130,7 +131,6 @@
     float: none;
     white-space: nowrap;
     vertical-align: top;
-
     border-radius: 3px;
     height: auto;
     min-height: 32px;
@@ -146,5 +146,18 @@
       white-space: normal;
       width: 100%;
     }
+  }
+
+  .add-list-form {
+    box-sizing: border-box;
+    display: inline-block;
+    float: none;
+    white-space: nowrap;
+    vertical-align: top;
+    border-radius: 3px;
+    height: auto;
+    min-height: 32px;
+    padding: 4px;
+    background-color: #c3c3c7;
   }
 }

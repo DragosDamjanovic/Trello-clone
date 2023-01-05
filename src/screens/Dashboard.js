@@ -35,10 +35,9 @@ const Dashboard = () => {
               ) : (
                 <>
                   {workspaces.map((workspace) => (
-                    <li className="workspaces-list-item">
+                    <li className="workspaces-list-item" key={workspace._id}>
                       <Link
                         to={`/workspaces/${workspace._id}`}
-                        key={workspace._id}
                         className="workspace-card"
                       >
                         <div className="workspace-title">
