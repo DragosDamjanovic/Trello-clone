@@ -12,6 +12,23 @@ const workspaceSchema = mongoose.Schema(
         ref: "lists",
       },
     ],
+    members: [
+      {
+        _id: false,
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "users",
+        },
+        name: {
+          type: String,
+          required: true,
+        },
+        role: {
+          type: String,
+          default: "admin",
+        },
+      },
+    ],
   },
   {
     timestamps: true,

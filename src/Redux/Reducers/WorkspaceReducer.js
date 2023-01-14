@@ -1,10 +1,16 @@
 import {
   ADD_CARD,
+  ADD_CARD_MEMBER,
+  ADD_CHECKLIST_ITEM,
   ADD_LIST,
+  ADD_MEMBER,
   ADD_WORKSPACE,
+  COMPLETE_CHECKLIST_ITEM,
   DELETE_CARD,
+  DELETE_CHECKLIST_ITEM,
   DELETE_LIST,
   EDIT_CARD,
+  EDIT_CHECKLIST_ITEM,
   GET_CARD,
   GET_LIST,
   GET_WORKSPACE,
@@ -147,6 +153,100 @@ export const WorkspaceReducer = (
           cardObjects: state.workspace.cardObjects.map((card) =>
             card._id === action.payload._id ? action.payload : card
           ),
+        },
+      };
+    case ADD_MEMBER:
+      return {
+        ...state,
+        workspace: {
+          ...state.workspace,
+          members: action.payload,
+        },
+      };
+    case ADD_CARD_MEMBER:
+      return {
+        ...state,
+        workspace: {
+          ...state.workspace,
+          cardObjects: state.workspace.cardObjects.map((card) =>
+            card._id === action.payload.cardId
+              ? { ...card, members: [...card.members, action.payload] }
+              : card
+          ),
+        },
+      };
+    case ADD_CHECKLIST_ITEM:
+      return {
+        ...state,
+        workspace: {
+          ...state.workspace,
+          cardObjects: state.workspace.cardObjects.map((card) =>
+            card._id === action.payload.cardId
+              ? { ...card, checklist: [...card.checklist, action.payload] }
+              : card
+          ),
+        },
+      };
+    case EDIT_CHECKLIST_ITEM:
+      return {
+        ...state,
+        workspace: {
+          ...state.workspace,
+          cardObjects: state.workspace.cardObjects.map((card) =>
+            card._id === action.payload.cardId
+              ? {
+                  ...card,
+                  checklist: [
+                    ...card.checklist,
+                    card.checklist.map((item) =>
+                      item._id === action.payload.itemId ? action.payload : item
+                    ),
+                  ],
+                }
+              : card
+          ),
+        },
+      };
+    case COMPLETE_CHECKLIST_ITEM:
+      return {
+        ...state,
+        workspace: {
+          ...state.workspace,
+          cardObjects: state.workspace.cardObjects.map((card) => {
+            if (card._id === action.payload.cardId) {
+              return {
+                ...card,
+                checklist: card.checklist.map((item) => {
+                  if (item._id === action.payload.itemId) {
+                    return {
+                      ...item,
+                      complete: action.payload.complete,
+                    };
+                  }
+                  return item;
+                }),
+              };
+            }
+            return card;
+          }),
+        },
+      };
+    case DELETE_CHECKLIST_ITEM:
+      return {
+        ...state,
+        workspace: {
+          ...state.workspace,
+          cardObjects: state.workspace.cardObjects.map((card) => {
+            if (card._id === action.payload.cardId) {
+              return {
+                ...card,
+                checklist: card.checklist.filter(
+                  (item) => item._id === action.payload.itemId
+                ),
+              };
+            }
+            return card;
+          }),
         },
       };
     default:

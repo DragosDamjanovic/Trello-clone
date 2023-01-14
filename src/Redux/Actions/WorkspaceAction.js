@@ -1,11 +1,17 @@
 import axios from "axios";
 import {
   ADD_CARD,
+  ADD_CARD_MEMBER,
+  ADD_CHECKLIST_ITEM,
   ADD_LIST,
+  ADD_MEMBER,
   ADD_WORKSPACE,
+  COMPLETE_CHECKLIST_ITEM,
   DELETE_CARD,
+  DELETE_CHECKLIST_ITEM,
   DELETE_LIST,
   EDIT_CARD,
+  EDIT_CHECKLIST_ITEM,
   GET_CARD,
   GET_LIST,
   GET_WORKSPACE,
@@ -497,3 +503,232 @@ export const editCard = (cardId, formData) => async (dispatch, getState) => {
     });
   }
 };
+
+// ADD MEMBER
+export const addMember = (userId) => async (dispatch, getState) => {
+  try {
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+
+        "Access-Control-Allow-Origin": "https://developer.mozilla.org",
+        Vary: "Origin",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const res = await axios.post(
+      `${URL}/api/workspaces/addMember/${userId}`,
+      config
+    );
+
+    dispatch({
+      type: ADD_MEMBER,
+      payload: res.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: WORKSPACE_ERROR,
+      payload: {
+        message: error.response.statusText,
+        status: error.response.status,
+      },
+    });
+  }
+};
+
+// ADD CARD MEMBER
+// prettier-ignore
+export const addCardMember = (userId, cardId, add) => async (dispatch, getState) => {
+    try {
+      const {
+        userLogin: { userInfo },
+      } = getState();
+
+      const config = {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+
+          "Access-Control-Allow-Origin": "https://developer.mozilla.org",
+          Vary: "Origin",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const res = await axios.post(
+        `${URL}/api/cards/addMember/${add}/${cardId}/${userId}`,
+        config
+      );
+
+      dispatch({
+        type: ADD_CARD_MEMBER,
+        payload: res.data,
+      });
+    } catch (error) {
+      dispatch({
+        type: WORKSPACE_ERROR,
+        payload: {
+          message: error.response.statusText,
+          status: error.response.status,
+        },
+      });
+    }
+  };
+
+// ADD CHECKLIST ITEM
+export const addChecklistItem = (cardId) => async (dispatch, getState) => {
+  try {
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+
+        "Access-Control-Allow-Origin": "https://developer.mozilla.org",
+        Vary: "Origin",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const res = await axios.post(`${URL}/api/checklists/${cardId}`, config);
+
+    dispatch({
+      type: ADD_CHECKLIST_ITEM,
+      payload: res.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: WORKSPACE_ERROR,
+      payload: {
+        message: error.response.statusText,
+        status: error.response.status,
+      },
+    });
+  }
+};
+
+// EDIT CHECKLIST ITEM
+// prettier-ignore
+export const editChecklistItem = (cardId, itemId) => async (dispatch, getState) => {
+    try {
+      const {
+        userLogin: { userInfo },
+      } = getState();
+
+      const config = {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+
+          "Access-Control-Allow-Origin": "https://developer.mozilla.org",
+          Vary: "Origin",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const res = await axios.patch(
+        `${URL}/api/checklists/${cardId}/${itemId}`,
+        config
+      );
+
+      dispatch({
+        type: EDIT_CHECKLIST_ITEM,
+        payload: res.data,
+      });
+    } catch (error) {
+      dispatch({
+        type: WORKSPACE_ERROR,
+        payload: {
+          message: error.response.statusText,
+          status: error.response.status,
+        },
+      });
+    }
+  };
+
+// COMPLETE CHECKLIST ITEM
+// prettier-ignore
+export const completeChecklistItem = (cardId, complete, itemId) => async (dispatch, getState) => {
+    try {
+      const {
+        userLogin: { userInfo },
+      } = getState();
+
+      const config = {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+
+          "Access-Control-Allow-Origin": "https://developer.mozilla.org",
+          Vary: "Origin",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const res = await axios.patch(
+        `${URL}/api/checklists/${cardId}/${complete}/${itemId}`,
+        config
+      );
+
+      dispatch({
+        type: COMPLETE_CHECKLIST_ITEM,
+        payload: res.data,
+      });
+    } catch (error) {
+      dispatch({
+        type: WORKSPACE_ERROR,
+        payload: {
+          message: error.response.statusText,
+          status: error.response.status,
+        },
+      });
+    }
+  };
+
+// DELETE CHECKLIST ITEM
+// prettier-ignore
+export const deleteChecklistItem = (cardId, itemId) => async (dispatch, getState) => {
+    try {
+      const {
+        userLogin: { userInfo },
+      } = getState();
+
+      const config = {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+
+          "Access-Control-Allow-Origin": "https://developer.mozilla.org",
+          Vary: "Origin",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const res = await axios.delete(
+        `${URL}/api/checklists/${cardId}/${itemId}`,
+        config
+      );
+
+      dispatch({
+        type: DELETE_CHECKLIST_ITEM,
+        payload: res.data,
+      });
+    } catch (error) {
+      dispatch({
+        type: WORKSPACE_ERROR,
+        payload: {
+          message: error.response.statusText,
+          status: error.response.status,
+        },
+      });
+    }
+  };
