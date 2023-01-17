@@ -4,7 +4,6 @@ import protect from "../Middleware/AuthMiddleware.js";
 import { check, validationResult } from "express-validator";
 import Workspace from "../Models/WorkspaceModel.js";
 import User from "../Models/UserModel.js";
-import member from "../Middleware/memberMiddleware.js";
 
 const workspaceRouter = express.Router();
 
@@ -86,7 +85,7 @@ workspaceRouter.get(
 // CHANGE WORKSPACES TITLE
 workspaceRouter.patch(
   "/rename/:id",
-  [protect, member, [check("title", "Title is required").not().isEmpty()]],
+  [protect, [check("title", "Title is required").not().isEmpty()]],
   asyncHandler(async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -113,7 +112,6 @@ workspaceRouter.patch(
 // ADD WORKSPACE MEMBER
 workspaceRouter.put(
   "/addMember/:userId",
-  [protect, member],
   asyncHandler(async (req, res) => {
     try {
       const workspace = await Workspace.findById(req.header("workspaceId"));

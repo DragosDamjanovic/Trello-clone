@@ -5,14 +5,13 @@ import List from "../Models/ListModel.js";
 import { check, validationResult } from "express-validator";
 import Workspace from "../Models/WorkspaceModel.js";
 import Card from "../Models/CardModel.js";
-import member from "../Middleware/memberMiddleware.js";
 
 const listRouter = express.Router();
 
 // ADD LIST
 listRouter.post(
   "/",
-  [[protect, member], [check("title", "Title is required").not().isEmpty()]],
+  [protect, [check("title", "Title is required").not().isEmpty()]],
   asyncHandler(async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -86,7 +85,7 @@ listRouter.get(
 // CHANGE LISTS TITLE
 listRouter.patch(
   "/rename/:id",
-  [protect, member, [check("title", "Title is required").not().isEmpty()]],
+  [protect, [check("title", "Title is required").not().isEmpty()]],
   asyncHandler(async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -113,7 +112,7 @@ listRouter.patch(
 // MOVE LIST
 listRouter.patch(
   "/move/:id",
-  [protect, member],
+  protect,
   asyncHandler(async (req, res) => {
     try {
       const toIndex = req.body.toIndex ? req.body.toIndex : 0;
@@ -139,7 +138,7 @@ listRouter.patch(
 // DELETE LIST
 listRouter.delete(
   "/:id",
-  [protect, member],
+  protect,
   asyncHandler(async (req, res) => {
     try {
       const list = await List.findById(req.params.id);

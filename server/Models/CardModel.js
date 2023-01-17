@@ -7,7 +7,7 @@ const cardSchema = mongoose.Schema({
     {
       _id: false,
       user: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "users",
       },
       name: {
@@ -23,6 +23,22 @@ const cardSchema = mongoose.Schema({
       },
       complete: {
         type: Boolean,
+      },
+    },
+  ],
+  activity: [
+    {
+      user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "users",
+      },
+      name: {
+        type: String,
+        required: true,
+      },
+      comment: {
+        type: String,
+        timestamp: true,
       },
     },
   ],

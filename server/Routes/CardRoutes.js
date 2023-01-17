@@ -6,14 +6,13 @@ import Card from "../Models/CardModel.js";
 import List from "../Models/ListModel.js";
 import Workspace from "../Models/WorkspaceModel.js";
 import User from "../Models/UserModel.js";
-import member from "../Middleware/memberMiddleware.js";
 
 const cardRouter = express.Router();
 
 // ADD CARD
 cardRouter.post(
   "/",
-  [protect, member, [check("title", "Title is required").not().isEmpty()]],
+  [protect, [check("title", "Title is required").not().isEmpty()]],
   asyncHandler(async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -92,7 +91,7 @@ cardRouter.get(
 // MOVE CARD
 cardRouter.patch(
   "/move/:id",
-  [protect, member],
+  protect,
   asyncHandler(async (req, res) => {
     try {
       const { fromId, toId, toIndex } = req.body;
@@ -138,7 +137,7 @@ cardRouter.patch(
 // DELETE CARD
 cardRouter.delete(
   "/:listId/:id",
-  [protect, member],
+  protect,
   asyncHandler(async (req, res) => {
     try {
       const card = await Card.findById(req.params.id);
@@ -166,7 +165,7 @@ cardRouter.delete(
 // EDIT CARDS TITLE AND DESCRIPTION
 cardRouter.patch(
   "/edit/:id",
-  [protect, member],
+  protect,
   asyncHandler(async (req, res) => {
     try {
       const { title, description } = req.body;
@@ -196,7 +195,7 @@ cardRouter.patch(
 // ADD/REMOVE MEMBER
 cardRouter.get(
   "/addMember/:add/:cardId/:userId",
-  [protect, member],
+  protect,
   asyncHandler(async (req, res) => {
     try {
       const { cardId, userId } = req.params;

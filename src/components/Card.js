@@ -59,6 +59,7 @@ const Card = ({ cardId, list, index }) => {
             onCancel={handleCancel}
             card={card}
             list={list}
+            width="700px"
           >
             <CardModal
               card={card}

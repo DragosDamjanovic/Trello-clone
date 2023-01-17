@@ -3,13 +3,14 @@ import asyncHandler from "express-async-handler";
 import protect from "../Middleware/AuthMiddleware.js";
 import { check, validationResult } from "express-validator";
 import Card from "../Models/CardModel.js";
+import User from "../Models/UserModel.js";
 
-const checklistRouter = express.Router();
+const activityRouter = express.Router();
 
-// ADD CHECKLIST ITEM
-checklistRouter.post(
+// ADD COMMENT
+activityRouter.post(
   "/:cardId",
-  [protect, [check("text", "Text is required").not().isEmpty()]],
+  [protect, [check("comment", "Comment is required").not().isEmpty()]],
   asyncHandler(async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -18,11 +19,16 @@ checklistRouter.post(
 
     try {
       const card = await Card.findById(req.params.cardId);
+      const user = await User.findById(req.user.id);
       if (!card) {
         return res.status(404).json({ msg: "Card not found" });
       }
 
-      card.checklist.push({ text: req.body.text, complete: false });
+      card.activity.push({
+        comment: req.body.comment,
+        user: user.id,
+        name: user.name,
+      });
       await card.save();
 
       res.json(card);
@@ -33,9 +39,9 @@ checklistRouter.post(
   })
 );
 
-// DELETE CHECKLIST ITEM
-checklistRouter.delete(
-  "/:cardId/:itemId",
+// DELETE COMMENT
+activityRouter.delete(
+  "/:cardId/:commentId",
   protect,
   asyncHandler(async (req, res) => {
     try {
@@ -44,11 +50,11 @@ checklistRouter.delete(
         return res.status(404).json({ msg: "Card not found" });
       }
 
-      const index = card.checklist.findIndex(
-        (item) => item.id === req.params.itemId
+      const index = card.activity.findIndex(
+        (comment) => comment.id === req.params.commentId
       );
       if (index !== -1) {
-        card.checklist.splice(index, 1);
+        card.activity.splice(index, 1);
         await card.save();
       }
 
@@ -60,10 +66,10 @@ checklistRouter.delete(
   })
 );
 
-// CHANGE CHECKLIST ITEM TEXT
-checklistRouter.patch(
-  "/:cardId/:itemId",
-  [[check("text", "Text is required").not().isEmpty()]],
+// EDIT COMMENT
+activityRouter.patch(
+  "/:cardId/:commentId",
+  [[check("comment", "Comment is required").not().isEmpty()]],
   asyncHandler(async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -76,8 +82,8 @@ checklistRouter.patch(
         return res.status(404).json({ msg: "Card not found" });
       }
 
-      card.checklist.find((item) => item.id === req.params.itemId).text =
-        req.body.text;
+      card.activity.find((item) => item.id === req.params.itemId).comment =
+        req.body.comment;
       await card.save();
 
       res.json(card);
@@ -88,26 +94,4 @@ checklistRouter.patch(
   })
 );
 
-// COMPLETE/UNCOMPLETE CHECKLIST ITEM
-checklistRouter.patch(
-  "/:cardId/:complete/:itemId",
-  asyncHandler(async (req, res) => {
-    try {
-      const card = await Card.findById(req.params.cardId);
-      if (!card) {
-        return res.status(404).json({ msg: "Card not found" });
-      }
-
-      card.checklist.find((item) => item.id === req.params.itemId).complete =
-        req.params.complete === "true";
-      await card.save();
-
-      res.json(card);
-    } catch (err) {
-      res.status(500);
-      throw new Error(err.message);
-    }
-  })
-);
-
-export default checklistRouter;
+export default activityRouter;

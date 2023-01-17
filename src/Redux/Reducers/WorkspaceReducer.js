@@ -2,15 +2,18 @@ import {
   ADD_CARD,
   ADD_CARD_MEMBER,
   ADD_CHECKLIST_ITEM,
+  ADD_COMMENT,
   ADD_LIST,
   ADD_MEMBER,
   ADD_WORKSPACE,
   COMPLETE_CHECKLIST_ITEM,
   DELETE_CARD,
   DELETE_CHECKLIST_ITEM,
+  DELETE_COMMENT,
   DELETE_LIST,
   EDIT_CARD,
   EDIT_CHECKLIST_ITEM,
+  EDIT_COMMENT,
   GET_CARD,
   GET_LIST,
   GET_WORKSPACE,
@@ -181,8 +184,14 @@ export const WorkspaceReducer = (
         workspace: {
           ...state.workspace,
           cardObjects: state.workspace.cardObjects.map((card) =>
-            card._id === action.payload.cardId
-              ? { ...card, checklist: [...card.checklist, action.payload] }
+            card._id === action.payload._id
+              ? {
+                  ...card,
+                  checklist: [
+                    ...card.checklist,
+                    action.payload.checklist.slice(-1)[0],
+                  ],
+                }
               : card
           ),
         },
@@ -193,15 +202,10 @@ export const WorkspaceReducer = (
         workspace: {
           ...state.workspace,
           cardObjects: state.workspace.cardObjects.map((card) =>
-            card._id === action.payload.cardId
+            card._id === action.payload._id
               ? {
                   ...card,
-                  checklist: [
-                    ...card.checklist,
-                    card.checklist.map((item) =>
-                      item._id === action.payload.itemId ? action.payload : item
-                    ),
-                  ],
+                  checklist: [...action.payload.checklist],
                 }
               : card
           ),
@@ -212,23 +216,14 @@ export const WorkspaceReducer = (
         ...state,
         workspace: {
           ...state.workspace,
-          cardObjects: state.workspace.cardObjects.map((card) => {
-            if (card._id === action.payload.cardId) {
-              return {
-                ...card,
-                checklist: card.checklist.map((item) => {
-                  if (item._id === action.payload.itemId) {
-                    return {
-                      ...item,
-                      complete: action.payload.complete,
-                    };
-                  }
-                  return item;
-                }),
-              };
-            }
-            return card;
-          }),
+          cardObjects: state.workspace.cardObjects.map((card) =>
+            card._id === action.payload._id
+              ? {
+                  ...card,
+                  checklist: [...action.payload.checklist],
+                }
+              : card
+          ),
         },
       };
     case DELETE_CHECKLIST_ITEM:
@@ -236,17 +231,62 @@ export const WorkspaceReducer = (
         ...state,
         workspace: {
           ...state.workspace,
-          cardObjects: state.workspace.cardObjects.map((card) => {
-            if (card._id === action.payload.cardId) {
-              return {
-                ...card,
-                checklist: card.checklist.filter(
-                  (item) => item._id === action.payload.itemId
-                ),
-              };
-            }
-            return card;
-          }),
+          cardObjects: state.workspace.cardObjects.map((card) =>
+            card._id === action.payload._id
+              ? {
+                  ...card,
+                  checklist: [...action.payload.checklist],
+                }
+              : card
+          ),
+        },
+      };
+    case ADD_COMMENT:
+      return {
+        ...state,
+        workspace: {
+          ...state.workspace,
+          cardObjects: state.workspace.cardObjects.map((card) =>
+            card._id === action.payload._id
+              ? {
+                  ...card,
+                  activity: [
+                    ...card.activity,
+                    action.payload.activity.slice(-1)[0],
+                  ],
+                }
+              : card
+          ),
+        },
+      };
+    case EDIT_COMMENT:
+      return {
+        ...state,
+        workspace: {
+          ...state.workspace,
+          cardObjects: state.workspace.cardObjects.map((card) =>
+            card._id === action.payload._id
+              ? {
+                  ...card,
+                  activity: [...action.payload.activity],
+                }
+              : card
+          ),
+        },
+      };
+    case DELETE_COMMENT:
+      return {
+        ...state,
+        workspace: {
+          ...state.workspace,
+          cardObjects: state.workspace.cardObjects.map((card) =>
+            card._id === action.payload._id
+              ? {
+                  ...card,
+                  activity: [...action.payload.activity],
+                }
+              : card
+          ),
         },
       };
     default:

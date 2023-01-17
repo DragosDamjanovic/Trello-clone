@@ -1,8 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "../Styles/components/sidebar.scss";
 import {
   UserOutlined,
-  LeftOutlined,
   ProjectOutlined,
   PlusOutlined,
   DownOutlined,
@@ -10,19 +9,24 @@ import {
   TableOutlined,
   CalendarOutlined,
 } from "@ant-design/icons";
-import { Button } from "antd";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getWorkspaces } from "../Redux/Actions/WorkspaceAction";
+import AddMembersModal from "./AddMembersModal";
+import Modal from "react-bootstrap/Modal";
 
 const Sidebar = () => {
+  const [show, setShow] = useState(false);
   const dispatch = useDispatch();
   const workspaces = useSelector((state) => state.workspace.workspaces);
 
   useEffect(() => {
     dispatch(getWorkspaces());
   }, [dispatch]);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   return (
     <Offcanvas.Body>
@@ -49,16 +53,19 @@ const Sidebar = () => {
               <ProjectOutlined />
               <p>Boards</p>
             </Link>
-            <Link
-              to="/"
-              className="item-link  d-flex flex-row align-items-center"
-            >
+            <div className="item-link  d-flex flex-row align-items-center">
               <UserOutlined />
               <p>Members</p>
-              <button>
+              <button onClick={handleShow}>
                 <PlusOutlined />
               </button>
-            </Link>
+              <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                  <h4>Invite to Workspace</h4>
+                </Modal.Header>
+                <AddMembersModal />
+              </Modal>
+            </div>
             <button className="item-button d-flex">
               <SettingOutlined className="item-button-icon" />
               <span className="item-button-text">Settings</span>

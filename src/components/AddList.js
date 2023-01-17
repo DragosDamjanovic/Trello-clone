@@ -64,41 +64,6 @@ const AddList = ({ workspaceId }) => {
         </form>
       )}
     </>
-    // {!open ? (
-    //     <div className="add-card row">
-    //       <Button className="open-add-card" type="button" onClick={handleClick}>
-    //         <AddIcon /> Add card
-    //       </Button>
-    //     </div>
-    //   ) : (
-    //     <div>
-    //       <form
-    //         onSubmit={(e) => onSubmit(e)}
-    //         className="p-2"
-    //         style={{ width: "272px" }}
-    //       >
-    //         <TextField
-    //           variant="outlined"
-    //           fullWidth
-    //           margin="normal"
-    //           required
-    //           label="Enter a title for this card..."
-    //           autoFocus
-    //           value={title}
-    //           onChange={(e) => setTitle(e.target.value)}
-    //           onKeyPress={(e) => e.key === "Enter" && onSubmit(e)}
-    //         />
-    //         <div className="add-card-controls">
-    //           <Button type="submit" variant="contained" color="primary">
-    //             Add card
-    //           </Button>
-    //           <Button type="button" onClick={handleClose}>
-    //             <CloseIcon />
-    //           </Button>
-    //         </div>
-    //       </form>
-    //     </div>
-    //   )}
   );
 };
 

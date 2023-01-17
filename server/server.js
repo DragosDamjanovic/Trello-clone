@@ -9,6 +9,7 @@ import listRouter from "./Routes/ListRoutes.js";
 import cardRouter from "./Routes/CardRoutes.js";
 import workspaceRouter from "./Routes/WorkspaceRoutes.js";
 import checklistRouter from "./Routes/ChecklistRoutes.js";
+import activityRouter from "./Routes/ActivityRoutes.js";
 
 dotenv.config();
 connectDatabase();
@@ -23,6 +24,7 @@ app.use("/api/lists", listRouter);
 app.use("/api/cards", cardRouter);
 app.use("/api/workspaces", workspaceRouter);
 app.use("/api/checklists", checklistRouter);
+app.use("/api/activity", activityRouter);
 
 // ERROR HANDLER
 app.use(notFound);

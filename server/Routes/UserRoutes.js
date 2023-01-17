@@ -60,4 +60,19 @@ userRouter.post(
   })
 );
 
+// Get users with email regex
+userRouter.get("/:input", protect, async (req, res) => {
+  try {
+    const regex = new RegExp(req.params.input, "i");
+    const users = await User.find({
+      email: regex,
+    }).select("-password");
+
+    res.json(users.filter((user) => user.id !== req.user.id));
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+});
+
 export default userRouter;
