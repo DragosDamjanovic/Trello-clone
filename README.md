@@ -17,22 +17,22 @@ Collaboration: Invite team members to collaborate on boards.
 Installation and Setup
 Clone the repository:
 
-bash
+```
 git clone https://github.com/DragosDamjanovic/Trello-clone.git
 ```
 Navigate to the project directory:
 
-bash
+```
 cd Trello-clone
 ```
 Install the required dependencies:
 
-bash 
+``` 
 npm install
 ```
 Start the development server:
 
-bash 
+```
 npm start
 ```
 Open your browser and navigate to http://localhost:3000 to access the application.
